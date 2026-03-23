@@ -4,533 +4,424 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Attention Mechanism: The Math Behind Transformers | Upskill in AI with Satyam</title>
-    <!-- Google Fonts for clean typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Google Fonts & Tailwind for rapid styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #0f172a;
-            line-height: 1.5;
-            scroll-behavior: smooth;
+        .gradient-hero {
+            background: linear-gradient(135deg, #0b1120 0%, #1a2a3a 100%);
         }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
+        .card-hover {
+            transition: all 0.2s ease;
         }
-
-        /* header branding */
-        .hero {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-        .hero h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1e3c72, #2b4f8c);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.3px;
-        }
-        .hero p {
-            font-size: 1.1rem;
-            color: #334155;
-            margin-top: 0.5rem;
-        }
-        .badge {
-            display: inline-block;
-            background: #e2e8f0;
-            padding: 0.2rem 0.8rem;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-top: 0.8rem;
-        }
-
-        /* step cards */
-        .step-card {
-            background: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
-            padding: 1.5rem 1.8rem;
-            transition: all 0.2s;
-            border: 1px solid #eef2f6;
-        }
-        .step-title {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.25rem;
-            flex-wrap: wrap;
-        }
-        .step-number {
-            background: #1e4a76;
-            color: white;
-            width: 36px;
-            height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        .step-title h2 {
-            font-size: 1.6rem;
-            font-weight: 600;
-            letter-spacing: -0.2px;
-        }
-        .step-sub {
-            color: #2c3e66;
-            margin-bottom: 1rem;
-            font-weight: 500;
-            border-left: 3px solid #3b82f6;
-            padding-left: 0.75rem;
-        }
-
-        /* interactive elements */
-        .token-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.7rem;
-            margin: 1rem 0;
-        }
-        .token-chip {
-            background: #f1f5f9;
-            padding: 0.5rem 1rem;
-            border-radius: 40px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid #e2e8f0;
-        }
-        .token-chip:hover {
-            background: #e0e7ff;
-            border-color: #3b82f6;
-        }
-        .token-chip.active {
-            background: #1e4a76;
-            color: white;
-            border-color: #1e4a76;
-        }
-        .vector-preview {
-            background: #f1f5f9;
-            padding: 0.8rem 1rem;
-            border-radius: 1rem;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 0.85rem;
-            margin-top: 0.8rem;
-        }
-
-        .matrix-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            max-width: 280px;
-            background: #f8fafc;
-            padding: 0.5rem;
-            border-radius: 12px;
-            margin: 0.5rem 0;
-        }
-        .matrix-cell {
-            background: white;
-            text-align: center;
-            padding: 6px 4px;
-            border-radius: 8px;
-            font-family: monospace;
-            font-weight: 500;
-            border: 1px solid #e2e8f0;
-        }
-
-        .data-table {
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-        .data-table table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            background: #fff;
-            border-radius: 16px;
-        }
-        .data-table th, .data-table td {
-            border: 1px solid #e2e8f0;
-            padding: 8px 10px;
-            text-align: center;
-        }
-        .data-table th {
-            background: #f1f5f9;
-            font-weight: 600;
-        }
-
-        .heatmap-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 6px;
-            margin-top: 1rem;
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.15);
         }
         .heat-cell {
-            background: #eff6ff;
+            transition: all 0.15s ease;
+        }
+        .step-transition {
+            transition: opacity 0.4s ease, transform 0.3s ease;
+        }
+        .math-bg {
+            background: #f8fafc;
+            border-left: 4px solid #2dd4bf;
+        }
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(55px, 1fr));
+            gap: 6px;
+            background: white;
+            padding: 8px;
+            border-radius: 16px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .matrix-cell {
+            background: #f1f5f9;
             text-align: center;
-            padding: 10px 5px;
-            border-radius: 12px;
-            font-weight: 500;
+            padding: 8px 4px;
+            border-radius: 10px;
+            font-family: 'Menlo', monospace;
             font-size: 0.8rem;
-            transition: 0.1s;
+            font-weight: 500;
         }
-        .score-bar {
-            display: inline-block;
-            width: 100%;
-            font-size: 0.75rem;
+        .animate-pulse-slow {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-
-        .selected-info {
-            background: #eef2ff;
-            border-radius: 1rem;
-            padding: 1rem;
-            margin-top: 1rem;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
-        button {
-            background: none;
-            border: none;
+        .tooltip {
+            position: relative;
+            cursor: help;
         }
-        footer {
-            text-align: center;
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border-top: 1px solid #e2e8f0;
-            color: #475569;
-        }
-        @media (max-width: 680px) {
-            .container { padding: 1rem; }
-            .step-card { padding: 1.2rem; }
-            .step-title h2 { font-size: 1.3rem; }
+        .tooltip:hover:after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            white-space: nowrap;
+            z-index: 20;
         }
     </style>
 </head>
-<body>
-<div class="container">
-    <div class="hero">
-        <h1>🧠 Attention Mechanism: The Math Behind Transformers</h1>
-        <p>Learn Q, K, V matrices, dot‑product attention & softmax — step by step, interactively</p>
-        <div class="badge">✨ Upskill in AI with Observe with Satyam ✨</div>
-    </div>
+<body class="bg-slate-50 text-slate-800 antialiased">
 
-    <!-- Step 1: Tokenization -->
-    <div class="step-card" id="step1">
-        <div class="step-title"><span class="step-number">1</span><h2>Tokenization</h2></div>
-        <p>We split the sentence into tokens. Each word becomes a token for simplicity.</p>
-        <div class="token-buttons" id="tokenListStep1"></div>
-        <div class="vector-preview" id="sentenceDisplay">📝 Sentence: "Crio helps you upskill in tech" → [Crio, helps, you, upskill, in, tech]</div>
-    </div>
-
-    <!-- Step 2: Token Embeddings (click to see vector) -->
-    <div class="step-card" id="step2">
-        <div class="step-title"><span class="step-number">2</span><h2>Token Embeddings</h2></div>
-        <p>Each token → 4‑dim vector. Click any token to see its embedding.</p>
-        <div class="token-buttons" id="embeddingTokens"></div>
-        <div id="embeddingDisplay" class="vector-preview">✨ Click a token above to view its embedding vector</div>
-    </div>
-
-    <!-- Step 3: The Problem - Why Q,K,V? (concept) -->
-    <div class="step-card">
-        <div class="step-title"><span class="step-number">3</span><h2>Why Q, K, V?</h2></div>
-        <p><strong>Query (Q)</strong>: "What am I looking for?" &nbsp;|&nbsp; <strong>Key (K)</strong>: "What do I offer?" &nbsp;|&nbsp; <strong>Value (V)</strong>: "Actual content to gather".<br>
-        Q and K compute attention scores, V provides the information to aggregate.</p>
-    </div>
-
-    <!-- Step 4: Computing Q, K, V via weight matrices -->
-    <div class="step-card">
-        <div class="step-title"><span class="step-number">4</span><h2>Computing Q, K, V (Matrix Multiplication)</h2></div>
-        <p>Each embedding × learned weight matrices → Q, K, V vectors. Below: computed values for every token.</p>
-        <div class="data-table">
-            <table id="qkvTable">
-                <thead><tr><th>Token</th><th>Q (4-dim)</th><th>K (4-dim)</th><th>V (4-dim)</th></tr></thead>
-                <tbody></tbody>
-            </table>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-slate-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-5 py-3 flex justify-between items-center">
+            <div class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-teal-700 to-blue-700 bg-clip-text text-transparent">
+                Observe with <span class="text-teal-600">Satyam</span>
+            </div>
+            <div class="text-sm font-medium text-slate-500">✨ Upskill in AI ✨</div>
         </div>
-        <div class="step-sub">💡 Same operation, different weights — training learns W_Q, W_K, W_V.</div>
-    </div>
+    </header>
 
-    <!-- Step 5: Insight - It's all just W × E -->
-    <div class="step-card">
-        <div class="step-title"><span class="step-number">5</span><h2>The Key Insight</h2></div>
-        <p>Q = W_Q × E , K = W_K × E , V = W_V × E. The "magic" is in learned weights. Matrix multiplication is fixed, but weights are tuned via backpropagation.</p>
-    </div>
+    <main class="pt-20 pb-12">
+        <!-- Hero -->
+        <div class="gradient-hero text-white py-12 md:py-16">
+            <div class="max-w-5xl mx-auto px-5 text-center">
+                <span class="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-1 text-xs font-semibold tracking-wide mb-4">🧠 DEEP DIVE: ATTENTION MECHANISM</span>
+                <h1 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">The Math Behind Transformers</h1>
+                <p class="text-slate-300 text-lg max-w-2xl mx-auto">Understand Q, K, V, dot‑product attention & softmax — step by step with interactive visuals. The core of GPT, Claude & modern AI.</p>
+                <div class="mt-6 flex justify-center gap-3 text-sm text-teal-200">
+                    <span>📐 12 interactive steps</span>
+                    <span>⚡ Real matrix math</span>
+                    <span>🎯 Click & learn</span>
+                </div>
+            </div>
+        </div>
 
-    <!-- Step 6: Attention Scores (Q·K / √d) interactive -->
-    <div class="step-card">
-        <div class="step-title"><span class="step-number">6</span><h2>Attention Scores</h2></div>
-        <p>For a <strong>query token</strong>, compute dot product with every token's Key, divided by √d (d=4 → √d=2).</p>
-        <label style="font-weight: 600;">Choose Query Token:</label>
-        <select id="queryTokenSelect" style="margin-left: 1rem; padding: 0.4rem 1rem; border-radius: 40px; border:1px solid #cbd5e1;"></select>
-        <div id="attentionScoresDisplay" class="selected-info" style="margin-top: 1rem;"></div>
-    </div>
+        <div class="max-w-5xl mx-auto px-5 py-8 space-y-12">
+            <!-- Step 1: Tokenization -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden card-hover transition-all" id="step1">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-600 text-white font-bold text-sm">1</span>
+                    <h2 class="text-xl font-bold text-slate-800">Tokenization</h2>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-600 mb-4">We split the sentence into tokens. Modern tokenizers may use subwords, but here each word = token for clarity.</p>
+                    <div class="bg-slate-100 p-4 rounded-xl text-center font-mono text-lg font-semibold text-slate-800">"Satyam helps you upskill in AI"</div>
+                    <div class="flex flex-wrap gap-2 mt-5 justify-center" id="token-chips">
+                        <!-- tokens injected -->
+                    </div>
+                    <p class="text-xs text-slate-400 mt-4 text-center">🔍 Tokens help the model process text stepwise.</p>
+                </div>
+            </div>
 
-    <!-- Step 7: Softmax Normalization -->
-    <div class="step-card">
-        <div class="step-title"><span class="step-number">7</span><h2>Softmax → Attention Weights</h2></div>
-        <p>Raw scores → probabilities (sum to 1). How much focus on each token.</p>
-        <div id="softmaxDisplay" class="selected-info"></div>
-    </div>
+            <!-- Step 2: Embeddings -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200" id="step2">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-600 text-white font-bold text-sm">2</span>
+                    <h2 class="text-xl font-bold text-slate-800">Token Embeddings (4‑dim vectors)</h2>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-600 mb-5">Each token → a vector of numbers. Click any token to see its embedding.</p>
+                    <div class="flex flex-wrap gap-3 justify-center mb-6" id="embedding-buttons"></div>
+                    <div id="embedding-result" class="bg-indigo-50/40 border border-indigo-100 rounded-xl p-4 text-center font-mono text-sm text-slate-700">✨ Click a token above to reveal its embedding vector</div>
+                </div>
+            </div>
 
-    <!-- Step 8: Full Attention Matrix (heatmap) -->
-    <div class="step-card">
-        <div class="step-title"><span class="step-number">8</span><h2>Full Attention Matrix</h2></div>
-        <p>Heatmap: rows = Query tokens, columns = Key tokens. Each row sums to 100%.</p>
-        <div id="heatmapContainer" style="overflow-x: auto;"></div>
-    </div>
+            <!-- Step 3: Q, K, V Concept -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-600 text-white font-bold text-sm">3</span>
+                    <h2 class="text-xl font-bold text-slate-800">Why Q, K, V?</h2>
+                </div>
+                <div class="p-6 grid md:grid-cols-3 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-xl"><span class="font-bold text-blue-700">Query (Q)</span><p class="text-sm mt-1">"What am I looking for?"</p><p class="text-xs text-slate-500">Example for "you": I need to know who is helping.</p></div>
+                    <div class="bg-purple-50 p-4 rounded-xl"><span class="font-bold text-purple-700">Key (K)</span><p class="text-sm mt-1">"What do I offer?"</p><p class="text-xs text-slate-500">Satyam → "I'm a mentor/guide!"</p></div>
+                    <div class="bg-green-50 p-4 rounded-xl"><span class="font-bold text-green-700">Value (V)</span><p class="text-sm mt-1">"Actual content to gather"</p><p class="text-xs text-slate-500">Information to enrich the representation.</p></div>
+                </div>
+                <p class="px-6 pb-4 text-sm text-slate-500 italic">✨ Insight: Q & K compute relevance, V provides the information to aggregate.</p>
+            </div>
 
-    <!-- Step 9: Weighted Sum of V (Output) -->
-    <div class="step-card">
-        <div class="step-title"><span class="step-number">9</span><h2>Output = Attention Weights × V</h2></div>
-        <p>Contextualized embedding: weighted sum of Value vectors using attention probabilities.</p>
-        <label style="font-weight: 600;">Select token to see output:</label>
-        <select id="outputTokenSelect" style="margin-left: 1rem; padding: 0.4rem 1rem; border-radius: 40px;"></select>
-        <div id="outputVectorDisplay" class="selected-info"></div>
-    </div>
+            <!-- Step 4: Compute Q,K,V (Matrix Multiplication) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200" id="step4">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-600 text-white font-bold text-sm">4</span>
+                    <h2 class="text-xl font-bold text-slate-800">Computing Q, K, V (W × Embedding)</h2>
+                </div>
+                <div class="p-6">
+                    <p class="mb-4 text-slate-600">Each embedding transformed via learned weight matrices: <strong>Q = W_Q·E, K = W_K·E, V = W_V·E</strong>. Below: precomputed for all tokens.</p>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full text-sm border border-slate-200 rounded-xl">
+                            <thead class="bg-slate-100"><tr><th class="p-2">Token</th><th>Q Vector (4‑dim)</th><th>K Vector</th><th>V Vector</th></tr></thead>
+                            <tbody id="qkv-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Step 10: Complete Flow animation summary -->
-    <div class="step-card">
-        <div class="step-title"><span class="step-number">10</span><h2>The Complete Attention Flow</h2></div>
-        <p>Embeddings → Q,K,V → Scores (Q·K/√d) → Softmax → Weighted sum of V → Contextual Embeddings.</p>
-        <div style="background:#eef2ff; border-radius: 20px; padding: 1rem; text-align: center; font-size:0.9rem;">⚡ [E] → Q,K,V → [Scores] → [Softmax] → [E'] = Attention(E)</div>
-    </div>
+            <!-- Step 5: Key Insight - Same operation -->
+            <div class="bg-gradient-to-r from-slate-50 to-slate-100 p-5 rounded-xl border border-slate-200 text-center">
+                <span class="font-bold text-teal-700">🔑 Key Insight: Q = W_Q × E , K = W_K × E , V = W_V × E — same math, different learned weights.</span>
+            </div>
 
-    <!-- Step 11: From Attention to LLM -->
-    <div class="step-card">
-        <div class="step-title"><span class="step-number">11</span><h2>From Attention to LLM</h2></div>
-        <p>Real Transformers stack 96 layers, multi‑head attention, feed‑forward nets, residual connections & positional encoding. Attention is the core building block of GPT, BERT, etc.</p>
-    </div>
+            <!-- Step 6 & 7: Attention Scores & Softmax (interactive) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-600 text-white font-bold text-sm">6-7</span>
+                    <h2 class="text-xl font-bold text-slate-800">Attention Scores + Softmax</h2>
+                </div>
+                <div class="p-6">
+                    <p class="mb-4">For a chosen Query token, compute <strong>score = Q·K / √d</strong> (d=4 → √d=2). Then softmax gives probabilities.</p>
+                    <div class="flex flex-wrap items-center gap-4 mb-5">
+                        <span class="font-semibold">Select Query Token:</span>
+                        <select id="query-selector" class="border rounded-lg px-3 py-2 bg-white shadow-sm"></select>
+                    </div>
+                    <div id="scores-softmax-panel" class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-4 rounded-xl"><h3 class="font-bold mb-2">🎯 Raw Scores (Q·K / √d)</h3><div id="raw-scores-list"></div></div>
+                        <div class="bg-slate-50 p-4 rounded-xl"><h3 class="font-bold mb-2">📊 Attention Weights (Softmax)</h3><div id="softmax-list"></div></div>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Step 12: How Does Reasoning Work? -->
-    <div class="step-card">
-        <div class="step-title"><span class="step-number">12</span><h2>Reasoning & Chain‑of‑Thought</h2></div>
-        <p>LLMs predict next token. Chain‑of‑Thought (CoT) breaks reasoning into steps, each step becomes context for the next prediction — easier than one giant leap.</p>
-        <div class="vector-preview">📌 Final formula: <strong>Attention(Q,K,V) = softmax(Q·Kᵀ / √d) · V</strong></div>
-    </div>
+            <!-- Step 8: Full Attention Matrix (Heatmap) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-600 text-white font-bold text-sm">8</span>
+                    <h2 class="text-xl font-bold text-slate-800">Full Attention Matrix (Heatmap)</h2>
+                </div>
+                <div class="p-6">
+                    <p class="mb-4">Rows = Query tokens, Columns = Key tokens. Each row sums to 100% — how much each token attends to others.</p>
+                    <div id="heatmap-container" class="overflow-x-auto"></div>
+                </div>
+            </div>
 
-    <footer>🧠 Interactive attention mechanics | Built for deep learning | Upskill with Satyam</footer>
-</div>
+            <!-- Step 9: Weighted Sum of V (Output) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-600 text-white font-bold text-sm">9</span>
+                    <h2 class="text-xl font-bold text-slate-800">Output = Attention Weights × V</h2>
+                </div>
+                <div class="p-6">
+                    <p class="mb-4">Contextualized embedding: weighted sum of Value vectors using attention probabilities.</p>
+                    <div class="flex flex-wrap items-center gap-4 mb-5">
+                        <span class="font-semibold">Select token to see output vector:</span>
+                        <select id="output-selector" class="border rounded-lg px-3 py-2"></select>
+                    </div>
+                    <div id="output-display" class="bg-gradient-to-r from-emerald-50 to-teal-50 p-5 rounded-xl border border-teal-200 font-mono text-center text-lg"></div>
+                </div>
+            </div>
 
-<script>
-    // -------- DEFINE SENTENCE DATA ----------
-    const tokens = ["Crio", "helps", "you", "upskill", "in", "tech"];
-    // embeddings (4-dim) from reference
-    const embeddings = [
-        [0.8, 0.2, 0.5, 0.9],
-        [0.3, 0.7, 0.4, 0.2],
-        [0.6, 0.4, 0.8, 0.3],
-        [0.4, 0.9, 0.3, 0.7],
-        [0.2, 0.3, 0.6, 0.4],
-        [0.9, 0.5, 0.2, 0.8]
-    ];
-    const d_model = 4;
-    const sqrt_d = Math.sqrt(d_model); // =2
+            <!-- Step 10: Complete Attention Flow Animation -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-600 text-white font-bold text-sm">10</span>
+                    <h2 class="text-xl font-bold text-slate-800">⚡ The Complete Attention Flow</h2>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-center gap-2 mb-6">
+                        <button id="play-flow" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2 rounded-full text-sm font-medium transition">▶ Animate Flow</button>
+                        <button id="reset-flow" class="border border-slate-300 bg-white px-5 py-2 rounded-full text-sm font-medium hover:bg-slate-50">Reset</button>
+                    </div>
+                    <div class="flex flex-wrap justify-center items-center gap-4 md:gap-8">
+                        <div id="flow-step-1" class="flow-node flex flex-col items-center opacity-30 transition-all duration-500"><div class="w-14 h-14 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600">1</div><span class="text-xs mt-1">Embeddings</span></div>
+                        <div class="text-2xl text-slate-300">→</div>
+                        <div id="flow-step-2" class="flow-node flex flex-col items-center opacity-30 transition-all duration-500"><div class="w-14 h-14 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600">2</div><span class="text-xs mt-1">Q,K,V</span></div>
+                        <div class="text-2xl text-slate-300">→</div>
+                        <div id="flow-step-3" class="flow-node flex flex-col items-center opacity-30 transition-all duration-500"><div class="w-14 h-14 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600">3</div><span class="text-xs mt-1">Scores / √d</span></div>
+                        <div class="text-2xl text-slate-300">→</div>
+                        <div id="flow-step-4" class="flow-node flex flex-col items-center opacity-30 transition-all duration-500"><div class="w-14 h-14 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600">4</div><span class="text-xs mt-1">Softmax</span></div>
+                        <div class="text-2xl text-slate-300">→</div>
+                        <div id="flow-step-5" class="flow-node flex flex-col items-center opacity-30 transition-all duration-500"><div class="w-14 h-14 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600">5</div><span class="text-xs mt-1">Weighted V</span></div>
+                    </div>
+                    <div id="flow-status" class="mt-6 text-center text-slate-500 text-sm italic bg-slate-100 p-3 rounded-lg">💡 Press "Animate Flow" to see step-by-step transformation</div>
+                </div>
+            </div>
 
-    // Weight matrices (realistic for demo, producing interpretable attention)
-    const W_Q = [
-        [0.5, 0.3, 0.2, 0.4],
-        [0.2, 0.6, 0.3, 0.1],
-        [0.4, 0.2, 0.5, 0.3],
-        [0.3, 0.4, 0.2, 0.6]
-    ];
-    const W_K = [
-        [0.4, 0.2, 0.3, 0.1],
-        [0.5, 0.3, 0.2, 0.4],
-        [0.2, 0.4, 0.6, 0.1],
-        [0.3, 0.2, 0.4, 0.5]
-    ];
-    const W_V = [
-        [0.7, 0.1, 0.2, 0.3],
-        [0.2, 0.8, 0.1, 0.2],
-        [0.3, 0.1, 0.7, 0.2],
-        [0.1, 0.2, 0.3, 0.6]
-    ];
+            <!-- Step 11 & 12: LLM & Reasoning -->
+            <div class="bg-slate-800 text-white rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center gap-3 mb-3"><span class="text-teal-300 text-xl">🧠</span><h3 class="text-xl font-bold">From Attention to LLM & Reasoning</h3></div>
+                <p class="text-slate-300 text-sm">Real transformers stack <strong>96 layers</strong>, multi-head attention, feed-forward networks, residuals & positional encoding. Attention formula:</p>
+                <div class="bg-slate-900/80 p-3 rounded-lg font-mono text-center my-3">Attention(Q,K,V) = softmax(Q·Kᵀ / √d) × V</div>
+                <p class="text-slate-300 text-sm">Chain‑of‑Thought reasoning: break hard question into smaller reasoning steps → each step acts as context, making prediction easier.</p>
+                <div class="mt-4 text-teal-300 text-xs">📌 TL;DR: Q and K find matches, V provides content. Learned weights make AI understand context.</div>
+            </div>
+        </div>
 
-    // helper: matrix multiplication (vector 1x4 * 4x4)
-    function matMulVec(vec, matrix) {
-        let result = [0,0,0,0];
-        for (let i=0; i<4; i++) {
-            let sum = 0;
-            for (let j=0; j<4; j++) {
-                sum += vec[j] * matrix[j][i];
+        <footer class="text-center text-slate-500 text-sm py-8 border-t mt-8">© 2026 Upskill in AI with Observe with Satyam — Interactive Attention Deep Dive</footer>
+    </main>
+
+    <script>
+        // -------- DATA: tokens, embeddings, weight matrices ----------
+        const tokens = ["Satyam", "helps", "you", "upskill", "in", "AI"];
+        const embeddings = [
+            [0.8, 0.2, 0.5, 0.9],
+            [0.3, 0.7, 0.4, 0.2],
+            [0.6, 0.4, 0.8, 0.3],
+            [0.4, 0.9, 0.3, 0.7],
+            [0.2, 0.3, 0.6, 0.4],
+            [0.9, 0.5, 0.2, 0.8]
+        ];
+
+        // Weight matrices (realistic, produce coherent attention)
+        const W_Q = [[0.5,0.3,0.2,0.4],[0.2,0.6,0.3,0.1],[0.4,0.2,0.5,0.3],[0.3,0.4,0.2,0.6]];
+        const W_K = [[0.4,0.2,0.3,0.1],[0.5,0.3,0.2,0.4],[0.2,0.4,0.6,0.1],[0.3,0.2,0.4,0.5]];
+        const W_V = [[0.7,0.1,0.2,0.3],[0.2,0.8,0.1,0.2],[0.3,0.1,0.7,0.2],[0.1,0.2,0.3,0.6]];
+
+        function matMulVec(vec, matrix) {
+            let res = [0,0,0,0];
+            for(let i=0; i<4; i++) for(let j=0; j<4; j++) res[i] += vec[j] * matrix[j][i];
+            return res.map(v => parseFloat(v.toFixed(4)));
+        }
+
+        let Q_vectors = [], K_vectors = [], V_vectors = [];
+        for(let emb of embeddings) {
+            Q_vectors.push(matMulVec(emb, W_Q));
+            K_vectors.push(matMulVec(emb, W_K));
+            V_vectors.push(matMulVec(emb, W_V));
+        }
+
+        const sqrt_d = 2.0;
+        let rawScores = Array(tokens.length).fill().map(()=>Array(tokens.length).fill(0));
+        for(let i=0;i<tokens.length;i++) for(let j=0;j<tokens.length;j++) {
+            let dot = Q_vectors[i].reduce((sum,val,idx)=> sum + val * K_vectors[j][idx], 0);
+            rawScores[i][j] = parseFloat((dot / sqrt_d).toFixed(4));
+        }
+
+        function softmaxRow(row) {
+            const max = Math.max(...row);
+            const exps = row.map(v => Math.exp(v - max));
+            const sum = exps.reduce((a,b)=>a+b,0);
+            return exps.map(e => parseFloat((e/sum).toFixed(4)));
+        }
+        let attnWeights = rawScores.map(row => softmaxRow(row));
+
+        let outputVectors = [];
+        for(let i=0;i<tokens.length;i++) {
+            let out = [0,0,0,0];
+            for(let j=0;j<tokens.length;j++) {
+                let w = attnWeights[i][j];
+                for(let d=0;d<4;d++) out[d] += w * V_vectors[j][d];
             }
-            result[i] = parseFloat(sum.toFixed(4));
+            outputVectors.push(out.map(v=>parseFloat(v.toFixed(4))));
         }
-        return result;
-    }
 
-    // compute Q, K, V for all tokens
-    let Q_vectors = [], K_vectors = [], V_vectors = [];
-    for (let emb of embeddings) {
-        Q_vectors.push(matMulVec(emb, W_Q));
-        K_vectors.push(matMulVec(emb, W_K));
-        V_vectors.push(matMulVec(emb, W_V));
-    }
-
-    // scores matrix: (i,j) = dot(Q_i, K_j) / sqrt_d
-    function dotProd(a,b) {
-        return a.reduce((s,val,idx)=> s + val*b[idx], 0);
-    }
-    let rawScores = Array(tokens.length).fill().map(()=>Array(tokens.length).fill(0));
-    for (let i=0; i<tokens.length; i++) {
-        for (let j=0; j<tokens.length; j++) {
-            let score = dotProd(Q_vectors[i], K_vectors[j]) / sqrt_d;
-            rawScores[i][j] = parseFloat(score.toFixed(4));
+        // DOM rendering
+        function renderTokens() {
+            const container = document.getElementById('token-chips');
+            container.innerHTML = tokens.map(t => `<div class="bg-slate-200 px-3 py-1.5 rounded-full text-sm font-medium">${t}</div>`).join('');
         }
-    }
 
-    // softmax row-wise
-    function softmaxRow(row) {
-        const maxVal = Math.max(...row);
-        const exps = row.map(v => Math.exp(v - maxVal));
-        const sumExp = exps.reduce((a,b)=>a+b,0);
-        return exps.map(e => parseFloat((e/sumExp).toFixed(4)));
-    }
-    let attentionWeights = Array(tokens.length).fill().map((_,i)=> softmaxRow(rawScores[i]));
-
-    // compute output vectors: weighted sum of V
-    let outputVectors = [];
-    for (let i=0; i<tokens.length; i++) {
-        let out = [0,0,0,0];
-        for (let j=0; j<tokens.length; j++) {
-            let w = attentionWeights[i][j];
-            for (let d=0; d<4; d++) {
-                out[d] += w * V_vectors[j][d];
-            }
-        }
-        outputVectors.push(out.map(v=>parseFloat(v.toFixed(4))));
-    }
-
-    // ---------------- RENDER UI ------------------
-    function renderTokenListStep1() {
-        const container = document.getElementById("tokenListStep1");
-        container.innerHTML = tokens.map((t,idx)=>`<div class="token-chip">${t} [${idx}]</div>`).join('');
-    }
-
-    function renderEmbeddingClickable() {
-        const div = document.getElementById("embeddingTokens");
-        div.innerHTML = tokens.map((t,idx)=>`<div class="token-chip" data-idx="${idx}">${t}</div>`).join('');
-        document.querySelectorAll("#embeddingTokens .token-chip").forEach(el => {
-            el.addEventListener('click', (e) => {
-                const idx = parseInt(el.dataset.idx);
-                const vec = embeddings[idx];
-                document.getElementById("embeddingDisplay").innerHTML = `🔍 Embedding of <strong>${tokens[idx]}</strong> = [${vec.join(', ')}]`;
+        function renderEmbeddingButtons() {
+            const btnDiv = document.getElementById('embedding-buttons');
+            btnDiv.innerHTML = tokens.map((t,i) => `<button class="embed-btn px-4 py-2 bg-white border border-slate-300 rounded-xl text-sm font-medium hover:border-teal-500 hover:shadow transition" data-idx="${i}">${t}</button>`).join('');
+            document.querySelectorAll('.embed-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(btn.dataset.idx);
+                    const vec = embeddings[idx];
+                    document.getElementById('embedding-result').innerHTML = `<span class="font-semibold">${tokens[idx]}</span> embedding = [${vec.join(', ')}] <span class="text-xs text-slate-500 ml-2">(4‑dim vector)</span>`;
+                });
             });
-        });
-    }
-
-    function renderQKVTable() {
-        const tbody = document.querySelector("#qkvTable tbody");
-        tbody.innerHTML = '';
-        for (let i=0; i<tokens.length; i++) {
-            let row = tbody.insertRow();
-            row.insertCell(0).innerHTML = `<strong>${tokens[i]}</strong>`;
-            row.insertCell(1).innerHTML = `[${Q_vectors[i].join(', ')}]`;
-            row.insertCell(2).innerHTML = `[${K_vectors[i].join(', ')}]`;
-            row.insertCell(3).innerHTML = `[${V_vectors[i].join(', ')}]`;
         }
-    }
 
-    function updateAttentionAndSoftmaxUI(selectedIdx) {
-        // scores for selected query
-        const scoresRow = rawScores[selectedIdx];
-        const tokensHtml = tokens.map((t,idx)=>`<div style="margin-bottom:6px;"><strong>${t}</strong>: score = ${scoresRow[idx]}</div>`).join('');
-        document.getElementById("attentionScoresDisplay").innerHTML = `
-            <div style="font-weight:600;">🔎 Attention scores for query <u>${tokens[selectedIdx]}</u> (Q·K/√d):</div>
-            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:8px;">${tokens.map((t,idx)=>`<div>${t}: ${scoresRow[idx]}</div>`).join('')}</div>
-        `;
-        // softmax
-        const softRow = attentionWeights[selectedIdx];
-        document.getElementById("softmaxDisplay").innerHTML = `
-            <div style="font-weight:600;">🧠 Softmax probabilities → Attention distribution:</div>
-            <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:8px;">${tokens.map((t,idx)=>`<div style="background:#e0e7ff; padding:4px 12px; border-radius:40px;">${t}: ${(softRow[idx]*100).toFixed(1)}%</div>`).join('')}</div>
-            <div class="vector-preview" style="margin-top:10px;">✅ Sum = ${softRow.reduce((a,b)=>a+b,0).toFixed(4)}</div>
-        `;
-    }
-
-    function renderHeatmap() {
-        const container = document.getElementById("heatmapContainer");
-        // create matrix style
-        let html = `<div style="font-size:0.75rem; margin-bottom:0.5rem;">Rows = Query, Cols = Key</div><div class="heatmap-grid" style="grid-template-columns: 80px repeat(${tokens.length}, 1fr);">`;
-        html += `<div style="font-weight:bold;">Query\\Key</div>`;
-        tokens.forEach(t=>html+=`<div style="font-weight:bold; text-align:center;">${t}</div>`);
-        for (let i=0; i<tokens.length; i++) {
-            html += `<div style="font-weight:600;">${tokens[i]}</div>`;
-            for (let j=0; j<tokens.length; j++) {
-                let weight = attentionWeights[i][j];
-                let intensity = Math.floor(weight * 200 + 55);
-                let bg = `hsl(210, 80%, ${Math.min(70, 40 + weight*40)}%)`;
-                html += `<div class="heat-cell" style="background:${bg}; color:${weight>0.2?'white':'#0f172a'}">${(weight*100).toFixed(0)}%</div>`;
+        function renderQKVTable() {
+            const tbody = document.getElementById('qkv-table-body');
+            tbody.innerHTML = '';
+            for(let i=0;i<tokens.length;i++) {
+                let row = `<tr class="border-b"><td class="p-2 font-medium">${tokens[i]}</td><td class="font-mono text-xs">[${Q_vectors[i].join(',')}]</td><td class="font-mono text-xs">[${K_vectors[i].join(',')}]</td><td class="font-mono text-xs">[${V_vectors[i].join(',')}]</td></tr>`;
+                tbody.insertAdjacentHTML('beforeend', row);
             }
         }
-        html += `</div>`;
-        container.innerHTML = html;
-    }
 
-    function updateOutputVector(selectedIdx) {
-        const outVec = outputVectors[selectedIdx];
-        const weightedSumDetails = tokens.map((t, j) => {
-            let w = attentionWeights[selectedIdx][j];
-            return `${t} (${(w*100).toFixed(0)}%) × [${V_vectors[j].join(',')}]`;
-        }).join('<br>');
-        document.getElementById("outputVectorDisplay").innerHTML = `
-            <div style="font-weight:600;">📤 Contextualized output for <strong>${tokens[selectedIdx]}</strong>:</div>
-            <div style="font-family: monospace; font-size:1rem; background:#fff; padding:12px; border-radius:16px;">[${outVec.join(', ')}]</div>
-            <details style="margin-top:12px;"><summary>⚙️ Weighted sum breakdown</summary><div style="font-size:0.8rem; margin-top:8px;">${weightedSumDetails}</div></details>
-        `;
-    }
+        function updateScoresSoftmax(queryIdx) {
+            const scores = rawScores[queryIdx];
+            const weights = attnWeights[queryIdx];
+            document.getElementById('raw-scores-list').innerHTML = tokens.map((t,i)=> `<div class="flex justify-between p-1 border-b"><span>${t}</span><span class="font-mono">${scores[i]}</span></div>`).join('');
+            document.getElementById('softmax-list').innerHTML = tokens.map((t,i)=> `<div class="flex justify-between p-1 border-b"><span>${t}</span><span class="font-mono font-semibold">${(weights[i]*100).toFixed(1)}%</span></div>`).join('');
+        }
 
-    function populateSelectors() {
-        const querySelect = document.getElementById("queryTokenSelect");
-        const outputSelect = document.getElementById("outputTokenSelect");
-        querySelect.innerHTML = tokens.map((t,i)=>`<option value="${i}">${t}</option>`).join('');
-        outputSelect.innerHTML = tokens.map((t,i)=>`<option value="${i}">${t}</option>`).join('');
-        querySelect.addEventListener('change', (e) => {
-            let idx = parseInt(e.target.value);
-            updateAttentionAndSoftmaxUI(idx);
-        });
-        outputSelect.addEventListener('change', (e) => {
-            let idx = parseInt(e.target.value);
-            updateOutputVector(idx);
-        });
-        // initial
-        updateAttentionAndSoftmaxUI(2); // you
-        updateOutputVector(2);
-    }
+        function renderHeatmap() {
+            const container = document.getElementById('heatmap-container');
+            let html = `<div class="grid" style="grid-template-columns: 80px repeat(${tokens.length}, 1fr); gap: 6px; font-size:12px;">`;
+            html += `<div></div>${tokens.map(t=>`<div class="text-center font-bold text-teal-700">${t}</div>`).join('')}`;
+            for(let i=0;i<tokens.length;i++) {
+                html += `<div class="font-semibold">${tokens[i]}</div>`;
+                for(let j=0;j<tokens.length;j++) {
+                    let val = attnWeights[i][j];
+                    let intensity = Math.min(200, 80 + val * 120);
+                    let bg = `rgb(20, 120, 180, ${0.2 + val*0.6})`;
+                    html += `<div class="text-center p-2 rounded-lg" style="background:${bg}; font-weight:500;">${(val*100).toFixed(0)}%</div>`;
+                }
+            }
+            html += `</div>`;
+            container.innerHTML = html;
+        }
 
-    // Step 2 and all dynamic
-    function initAll() {
-        renderTokenListStep1();
-        renderEmbeddingClickable();
+        function updateOutput(tokenIdx) {
+            const outVec = outputVectors[tokenIdx];
+            document.getElementById('output-display').innerHTML = `<span class="font-bold text-teal-800">Contextual embedding for "${tokens[tokenIdx]}" :</span> [${outVec.join(', ')}] <span class="block text-xs mt-2 text-slate-500">✨ Enriched with context from other tokens via attention</span>`;
+        }
+
+        function populateSelectors() {
+            const querySelect = document.getElementById('query-selector');
+            const outputSelect = document.getElementById('output-selector');
+            querySelect.innerHTML = tokens.map((t,i)=>`<option value="${i}">${t}</option>`).join('');
+            outputSelect.innerHTML = tokens.map((t,i)=>`<option value="${i}">${t}</option>`).join('');
+            querySelect.addEventListener('change', (e) => updateScoresSoftmax(parseInt(e.target.value)));
+            outputSelect.addEventListener('change', (e) => updateOutput(parseInt(e.target.value)));
+            updateScoresSoftmax(2); // default 'you'
+            updateOutput(2);
+        }
+
+        // Flow animation
+        let flowTimeouts = [];
+        const flowSteps = ['flow-step-1','flow-step-2','flow-step-3','flow-step-4','flow-step-5'];
+        const stepMessages = ["📥 Input token embeddings (4-dim each)","🔄 Multiply by W_Q, W_K, W_V → Q,K,V","📐 Compute Q·K / √d → raw attention scores","🧮 Softmax → attention probabilities (sum=1)","✨ Weighted sum of V → contextualized output"];
+        function playFlow() {
+            flowTimeouts.forEach(clearTimeout);
+            flowSteps.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.remove('opacity-100','scale-105','bg-teal-100');
+                if(el) el.classList.add('opacity-30');
+            });
+            const statusDiv = document.getElementById('flow-status');
+            flowSteps.forEach((stepId, idx) => {
+                const timeout = setTimeout(() => {
+                    if(idx>0) document.getElementById(flowSteps[idx-1])?.classList.remove('scale-105','bg-teal-100','shadow-lg');
+                    const current = document.getElementById(stepId);
+                    current.classList.remove('opacity-30');
+                    current.classList.add('opacity-100', 'scale-105', 'bg-teal-100', 'shadow-lg', 'rounded-full');
+                    statusDiv.innerHTML = `⚡ ${stepMessages[idx]} <span class="block text-teal-700 text-xs mt-1">Step ${idx+1}/5</span>`;
+                    if(idx === flowSteps.length-1) {
+                        setTimeout(() => statusDiv.innerHTML += `<br/>✅ Attention completed! New embeddings = contextual representation.`, 300);
+                    }
+                }, idx * 1300);
+                flowTimeouts.push(timeout);
+            });
+        }
+        function resetFlow() {
+            flowTimeouts.forEach(clearTimeout);
+            flowSteps.forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.remove('opacity-100','scale-105','bg-teal-100','shadow-lg');
+                el.classList.add('opacity-30');
+            });
+            document.getElementById('flow-status').innerHTML = "💡 Press 'Animate Flow' to see step-by-step transformation";
+        }
+
+        // Initialization
+        renderTokens();
+        renderEmbeddingButtons();
         renderQKVTable();
         renderHeatmap();
         populateSelectors();
-        // also add initial sentence preview
-        document.getElementById("sentenceDisplay").innerHTML = `📝 Sentence: "Crio helps you upskill in tech" → [${tokens.join(', ')}]`;
-    }
 
-    // extra tooltips for step 1 click, show token index
-    document.addEventListener('click', (e) => {
-        if(e.target.closest('#tokenListStep1') && e.target.classList.contains('token-chip')) {
-            const txt = e.target.innerText;
-            alert(`Token: ${txt}\nIndex: ${tokens.indexOf(txt.split(' ')[0])}`);
-        }
-    });
-
-    // also ensure that Step 6 selector updates when output token selection sync? but independent fine
-    initAll();
-</script>
+        document.getElementById('play-flow').addEventListener('click', playFlow);
+        document.getElementById('reset-flow').addEventListener('click', resetFlow);
+    </script>
 </body>
 </html>
