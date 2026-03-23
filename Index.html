@@ -4,401 +4,328 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPSKILL IN AI | Observe with Satyam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --primary: #0f172a;
-            --secondary: #64748b;
-            --accent: #2dd4bf;
-            --accent-hover: #14b8a6;
-            --bg-light: #f8fafc;
-            --border: #e2e8f0;
-        }
-
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            color: var(--primary);
-            line-height: 1.75;
-        }
-
-        /* Header & Hero */
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 1.5rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
-        .logo { font-size: 1.5rem; font-weight: 800; }
-        .logo span { color: var(--accent); }
-
-        .hero {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: white;
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-        .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
-        .hero p { font-size: 1.25rem; color: #cbd5e1; max-width: 600px; margin: 0 auto; }
-
-        /* Container */
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* Step Sections */
-        .step-container {
-            margin-bottom: 4rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .step-container:last-child { border-bottom: none; }
-        
-        h2 {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-top: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .step-badge {
-            background-color: var(--accent);
-            color: var(--primary);
-            width: 30px;
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            font-size: 1rem;
-            font-weight: bold;
-        }
-        p.desc {
-            color: var(--secondary);
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Interactive Boxes */
-        .interactive-box {
-            background-color: var(--bg-light);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        /* Buttons */
-        .btn {
-            background-color: var(--accent);
-            color: var(--primary);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin: 0.5rem;
-        }
-        .btn:hover { background-color: var(--accent-hover); transform: translateY(-2px); }
-        .btn-outline {
-            background-color: transparent;
-            border: 2px solid var(--border);
-            color: var(--secondary);
-        }
-        .btn-outline:hover, .btn-outline.active {
-            border-color: var(--accent);
-            color: var(--primary);
-        }
-
-        /* Output Displays */
-        .output-box {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background-color: white;
-            border: 1px dashed #cbd5e1;
-            border-radius: 8px;
-            font-family: monospace;
-            font-size: 1.1rem;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            width: 100%;
-            background-color: #e2e8f0;
-            border-radius: 999px;
-            overflow: hidden;
-            margin: 1rem 0;
-            height: 20px;
-        }
-        .progress-bar {
-            height: 100%;
-            background-color: var(--accent);
-            width: 0%;
-            transition: width 0.3s;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-        }
-
-        /* Neuron Grid */
-        .neuron-grid {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
-        .neuron {
-            width: 50px; height: 50px;
-            background-color: white;
-            border: 3px solid #cbd5e1;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .neuron.active {
-            background-color: #f59e0b;
-            border-color: #d97706;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .interactive-hover:hover { transform: scale(1.05); transition: transform 0.2s; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 text-slate-800 min-h-screen flex flex-col">
 
-<header>
-    <div class="logo">Observe with <span>Satyam</span></div>
-    <nav>UPSKILL IN AI Masterclass</nav>
-</header>
-
-<section class="hero">
-    <h1>AI Fundamentals: 12 Steps to Mastery</h1>
-    <p>A complete interactive guide to understanding how Artificial Intelligence actually works, from basic data to Large Language Models.</p>
-</section>
-
-<div class="container">
-
-    <div class="step-container">
-        <h2><span class="step-badge">1</span> What is AI, ML, and DL?</h2>
-        <p class="desc">Artificial Intelligence is the broad concept. Machine Learning (ML) is a subset that learns from data. Deep Learning (DL) is a further subset using neural networks. Click to explore.</p>
-        <div class="interactive-box">
-            <button class="btn btn-outline" onclick="showDef(1, 'AI: Any technique that enables computers to mimic human intelligence.')">Artificial Intelligence</button>
-            <button class="btn btn-outline" onclick="showDef(1, 'ML: Statistical methods that enable machines to improve at tasks with experience (data).')">Machine Learning</button>
-            <button class="btn btn-outline" onclick="showDef(1, 'DL: Algorithms inspired by the human brain (Neural Networks) applied to large datasets.')">Deep Learning</button>
-            <div id="out-1" class="output-box">Click a term above...</div>
-        </div>
-    </div>
-
-    <div class="step-container">
-        <h2><span class="step-badge">2</span> Data Collection</h2>
-        <p class="desc">AI is nothing without data. Models need vast amounts of text, images, or numbers to find patterns.</p>
-        <div class="interactive-box">
-            <p>Click to collect data points for our model:</p>
-            <button class="btn" onclick="collectData()">Collect Data</button>
-            <div class="progress-container"><div id="data-prog" class="progress-bar"></div></div>
-            <div id="out-2" class="output-box">Data Points: 0 / 1000</div>
-        </div>
-    </div>
-
-    <div class="step-container">
-        <h2><span class="step-badge">3</span> Data Preprocessing</h2>
-        <p class="desc">Raw data is messy. It contains errors, missing values, and formatting issues. We must clean it before feeding it to an AI.</p>
-        <div class="interactive-box">
-            <div style="margin-bottom: 1rem; background: #e2e8f0; padding: 10px; border-radius: 5px;">Raw Input: <code>Th!s data  is vEry M#ssy... &amp;&amp; unUsable</code></div>
-            <button class="btn" onclick="document.getElementById('out-3').innerText = 'Cleaned: [this, data, is, very, messy, and, unusable]'">Run Preprocessing</button>
-            <div id="out-3" class="output-box">Awaiting cleaning...</div>
-        </div>
-    </div>
-
-    <div class="step-container">
-        <h2><span class="step-badge">4</span> Choosing an Algorithm</h2>
-        <p class="desc">Depending on the task (predicting a price, classifying an image), we choose a specific algorithm.</p>
-        <div class="interactive-box">
-            <button class="btn btn-outline" onclick="document.getElementById('out-4').innerText = 'Linear Regression: Best for predicting continuous numbers (e.g., House Prices).'">Predict Price</button>
-            <button class="btn btn-outline" onclick="document.getElementById('out-4').innerText = 'Logistic Regression / SVM: Best for categorizing (e.g., Spam vs. Not Spam).'">Classify Email</button>
-            <div id="out-4" class="output-box">Select a task...</div>
-        </div>
-    </div>
-
-    <div class="step-container">
-        <h2><span class="step-badge">5</span> Model Training (The "Learning" Phase)</h2>
-        <p class="desc">The model iterates over the data, guessing the answer, checking its error, and updating its internal math (weights).</p>
-        <div class="interactive-box">
-            <button class="btn" id="train-btn" onclick="trainModel()">Start Training Epochs</button>
-            <div id="out-5" class="output-box" style="flex-direction: column; align-items: flex-start; text-align: left;">
-                Waiting to start...
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="font-bold text-xl text-slate-800">
+                Observe with <span class="text-teal-500">Satyam</span>
             </div>
+            <nav class="hidden md:flex gap-6 font-medium text-sm text-slate-600">
+                <a href="#" class="hover:text-teal-500">AI Fundamentals</a>
+                <a href="#" class="hover:text-teal-500">Masterclass</a>
+            </nav>
         </div>
-    </div>
+    </header>
 
-    <div class="step-container">
-        <h2><span class="step-badge">6</span> The Loss Function</h2>
-        <p class="desc">Loss represents how "wrong" the model's predictions are. The goal of training is to minimize this loss using Calculus (Gradient Descent).</p>
-        <div class="interactive-box">
-            <p>Model's current prediction error (Loss): <strong id="loss-val" style="color: #ef4444; font-size: 1.5rem;">0.850</strong></p>
-            <button class="btn" onclick="optimizeLoss()">Run Gradient Descent Step</button>
+    <section class="pt-28 pb-12 gradient-bg">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <span class="inline-block bg-white/20 text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
+                UPSKILL IN AI
+            </span>
+            <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">
+                AI Fundamentals & The Math Behind LLMs
+            </h1>
+            <p class="text-lg text-white/80 max-w-2xl mx-auto">
+                Learn how artificial intelligence works from scratch. A brilliant interactive flow explaining Tokenization, Embeddings, and Attention.
+            </p>
         </div>
-    </div>
+    </section>
 
-    <div class="step-container">
-        <h2><span class="step-badge">7</span> Testing & Evaluation</h2>
-        <p class="desc">We never test a model on the data it trained on (that's memorization, not learning!). We use a hidden "Test Set".</p>
-        <div class="interactive-box">
-            <button class="btn btn-outline" onclick="document.getElementById('out-7').innerText = 'Training Accuracy: 98% (Model saw this data)'">Check Train Data</button>
-            <button class="btn btn-outline" onclick="document.getElementById('out-7').innerText = 'Test Accuracy: 89% (True representation of generalization)'">Check Test Data</button>
-            <div id="out-7" class="output-box">Evaluate the model...</div>
-        </div>
-    </div>
+    <section class="py-12 bg-white">
+        <div class="max-w-4xl mx-auto px-4 space-y-16">
 
-    <div class="step-container">
-        <h2><span class="step-badge">8</span> Introduction to Neural Networks</h2>
-        <p class="desc">Inspired by biological brains, nodes (neurons) are stacked in layers. Data passes through, getting multiplied by weights at each step.</p>
-        <div class="interactive-box">
-            <p>Click neurons to simulate "firing" activations through the network:</p>
-            <div class="neuron-grid">
-                <div class="neuron" onclick="this.classList.toggle('active')"></div>
-                <div class="neuron" onclick="this.classList.toggle('active')"></div>
-                <div class="neuron" onclick="this.classList.toggle('active')"></div>
-                <div class="neuron" onclick="this.classList.toggle('active')"></div>
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-4 border-b pb-2">Step 1: Tokenization</h2>
+                <p class="text-slate-600 mb-6">
+                    Before an AI can process text, it splits the sentence into smaller chunks called <strong>tokens</strong>. 
+                    Let's use the sentence: <strong class="text-slate-900">"Satyam helps you upskill in AI"</strong>
+                </p>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center">
+                    <div class="text-lg font-semibold bg-white p-4 rounded-lg border-2 border-dashed border-slate-300 mb-6" id="raw-text">
+                        "Satyam helps you upskill in AI"
+                    </div>
+                    <button id="btn-tokenize" class="px-6 py-2.5 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-lg transition-colors mb-6">
+                        Run Tokenizer
+                    </button>
+                    <div id="tokens-display" class="hidden flex flex-wrap gap-3 justify-center fade-in">
+                        </div>
+                </div>
             </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-4 border-b pb-2">Step 2: Token Embeddings</h2>
+                <p class="text-slate-600 mb-6">
+                    AI models convert tokens into mathematical vectors (arrays of numbers) so they can understand relationships. Words with similar meanings have similar vectors.
+                </p>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center">
+                    <div class="flex flex-wrap gap-3 justify-center mb-8" id="embedding-buttons">
+                        <button class="embed-btn px-4 py-2 rounded-lg font-semibold bg-white border-2 border-slate-200 text-slate-600 hover:border-teal-500" data-vec="[0.92, 0.14, -0.55, 0.88]">Satyam</button>
+                        <button class="embed-btn px-4 py-2 rounded-lg font-semibold bg-white border-2 border-slate-200 text-slate-600 hover:border-teal-500" data-vec="[0.11, 0.99, 0.23, -0.41]">helps</button>
+                        <button class="embed-btn px-4 py-2 rounded-lg font-semibold bg-white border-2 border-slate-200 text-slate-600 hover:border-teal-500" data-vec="[-0.85, 0.33, 0.91, 0.12]">you</button>
+                        <button class="embed-btn px-4 py-2 rounded-lg font-semibold bg-white border-2 border-slate-200 text-slate-600 hover:border-teal-500" data-vec="[0.77, 0.82, -0.19, 0.95]">upskill</button>
+                        <button class="embed-btn px-4 py-2 rounded-lg font-semibold bg-white border-2 border-slate-200 text-slate-600 hover:border-teal-500" data-vec="[0.91, 0.85, -0.15, 0.99]">AI</button>
+                    </div>
+                    <div id="embedding-result" class="text-slate-500 italic h-16 flex items-center justify-center bg-white border border-slate-200 rounded-lg">
+                        Click a token above to see its mathematical vector...
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-4 border-b pb-2">Step 3: The Attention Mechanism</h2>
+                <p class="text-slate-600 mb-6">
+                    In modern AI (like Transformers), words look at other words to understand context. Let's see what the word <strong>"upskill"</strong> pays attention to in our sentence.
+                </p>
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="font-semibold text-slate-800 mb-4">Attention scores for the Query word: "upskill"</div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <span class="w-20 font-medium text-slate-600 text-right">Satyam</span>
+                            <div class="flex-1 h-6 bg-slate-100 rounded overflow-hidden">
+                                <div class="h-full bg-teal-500 rounded" style="width: 35%;"></div>
+                            </div>
+                            <span class="w-12 text-sm font-mono text-slate-500">35%</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="w-20 font-medium text-slate-600 text-right">helps</span>
+                            <div class="flex-1 h-6 bg-slate-100 rounded overflow-hidden">
+                                <div class="h-full bg-teal-500 rounded" style="width: 15%;"></div>
+                            </div>
+                            <span class="w-12 text-sm font-mono text-slate-500">15%</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="w-20 font-medium text-slate-600 text-right">you</span>
+                            <div class="flex-1 h-6 bg-slate-100 rounded overflow-hidden">
+                                <div class="h-full bg-teal-500 rounded" style="width: 10%;"></div>
+                            </div>
+                            <span class="w-12 text-sm font-mono text-slate-500">10%</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="w-20 font-medium text-slate-600 text-right">upskill</span>
+                            <div class="flex-1 h-6 bg-slate-100 rounded overflow-hidden">
+                                <div class="h-full bg-teal-500 rounded" style="width: 5%;"></div>
+                            </div>
+                            <span class="w-12 text-sm font-mono text-slate-500">5%</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="w-20 font-medium text-teal-600 text-right">AI</span>
+                            <div class="flex-1 h-6 bg-slate-100 rounded overflow-hidden">
+                                <div class="h-full bg-teal-500 rounded" style="width: 95%;"></div>
+                            </div>
+                            <span class="w-12 text-sm font-mono text-slate-500 font-bold">95%</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 p-4 bg-teal-50 rounded-lg border border-teal-100 text-sm text-teal-800">
+                        <strong>Insight:</strong> "upskill" pays the highest attention to "AI" because in this context, the specific skill being learned is AI.
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-4 border-b pb-2">Step 4: The Complete Neural Flow</h2>
+                <p class="text-slate-600 mb-6">
+                    See how data flows from Raw Text into a Neural Network Prediction.
+                </p>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <div class="flex justify-center gap-4 mb-8">
+                        <button id="btn-play" class="px-6 py-2 rounded-lg font-semibold bg-slate-800 text-white hover:bg-slate-700 transition-colors">
+                            ▶ Play Animation
+                        </button>
+                        <button id="btn-reset" class="px-6 py-2 rounded-lg font-semibold bg-white border border-slate-300 text-slate-600 hover:bg-slate-100 transition-colors">
+                            Reset
+                        </button>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+                        
+                        <div id="flow-1" class="flow-step opacity-30 flex flex-col items-center transition-opacity duration-500">
+                            <div class="w-16 h-16 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xl font-bold border-2 border-teal-500 mb-2">1</div>
+                            <div class="text-sm font-semibold text-slate-800">Input Data</div>
+                        </div>
+
+                        <div class="hidden md:block text-slate-300 text-2xl">➔</div>
+                        <div class="md:hidden text-slate-300 text-2xl">⬇</div>
+
+                        <div id="flow-2" class="flow-step opacity-30 flex flex-col items-center transition-opacity duration-500">
+                            <div class="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold border-2 border-amber-500 mb-2">2</div>
+                            <div class="text-sm font-semibold text-slate-800">Embeddings</div>
+                        </div>
+
+                        <div class="hidden md:block text-slate-300 text-2xl">➔</div>
+                        <div class="md:hidden text-slate-300 text-2xl">⬇</div>
+
+                        <div id="flow-3" class="flow-step opacity-30 flex flex-col items-center transition-opacity duration-500">
+                            <div class="w-16 h-16 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xl font-bold border-2 border-purple-500 mb-2">3</div>
+                            <div class="text-sm font-semibold text-slate-800">Attention Layers</div>
+                        </div>
+
+                        <div class="hidden md:block text-slate-300 text-2xl">➔</div>
+                        <div class="md:hidden text-slate-300 text-2xl">⬇</div>
+
+                        <div id="flow-4" class="flow-step opacity-30 flex flex-col items-center transition-opacity duration-500">
+                            <div class="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xl font-bold border-2 border-green-500 mb-2">4</div>
+                            <div class="text-sm font-semibold text-slate-800">Output Prediction</div>
+                        </div>
+                    </div>
+
+                    <div id="flow-status" class="mt-8 text-center text-slate-500 font-mono h-8">
+                        Ready to process...
+                    </div>
+                </div>
+            </div>
+
+            <div class="gradient-bg rounded-xl p-8 text-white mt-12">
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span>🚀</span> UPSKILL IN AI Mastery
+                </h2>
+                <div class="bg-white/10 rounded-lg p-5 mb-6 font-mono text-center text-lg">
+                    LLM Prediction = Softmax( Q·Kᵀ / √d ) × V
+                </div>
+                <p class="text-slate-300">
+                    <strong class="text-white">TL;DR:</strong> 
+                    Artificial Intelligence reads text as numbers. It uses massive matrices of weights to multiply those numbers, calculating "attention" to understand context, and ultimately predicts the highest probability for the next word.
+                </p>
+            </div>
+
         </div>
-    </div>
+    </section>
 
-    <div class="step-container">
-        <h2><span class="step-badge">9</span> Natural Language Processing (NLP) & Tokenization</h2>
-        <p class="desc">AI can't read English. It reads numbers. First, text is split into "Tokens".</p>
-        <div class="interactive-box">
-            <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">"Observe with Satyam"</div>
-            <button class="btn" onclick="document.getElementById('out-9').innerHTML = '<span class=\'btn-outline btn\'>[Observe]</span> <span class=\'btn-outline btn\'>[with]</span> <span class=\'btn-outline btn\'>[Satyam]</span>'">Tokenize</button>
-            <div id="out-9" class="output-box">Awaiting text...</div>
+    <footer class="bg-slate-900 text-white py-12 mt-auto">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h3 class="text-xl font-bold mb-2">UPSKILL IN AI | Observe with Satyam</h3>
+            <p class="text-slate-400 text-sm">© 2026 AI Interactive Learning. All rights reserved.</p>
         </div>
-    </div>
+    </footer>
 
-    <div class="step-container">
-        <h2><span class="step-badge">10</span> Embeddings (Math for Words)</h2>
-        <p class="desc">Tokens are mapped to coordinate vectors. Words with similar meanings are placed closer together in mathematical space.</p>
-        <div class="interactive-box">
-            <button class="btn btn-outline" onclick="document.getElementById('out-10').innerText = 'Embedding [0.21, -0.45, 0.88, 0.12]'">Satyam</button>
-            <button class="btn btn-outline" onclick="document.getElementById('out-10').innerText = 'Embedding [0.22, -0.44, 0.89, 0.11] (Very similar to Satyam!)'">Observe</button>
-            <button class="btn btn-outline" onclick="document.getElementById('out-10').innerText = 'Embedding [-0.99, 0.10, -0.44, 0.81] (Far apart in math space)'">Apple</button>
-            <div id="out-10" class="output-box">Click a word to see its Vector...</div>
-        </div>
-    </div>
-
-    <div class="step-container">
-        <h2><span class="step-badge">11</span> Generative AI (LLMs)</h2>
-        <p class="desc">Large Language Models (like ChatGPT) are simply advanced sequence-predictors. They calculate the probability of the *next* word.</p>
-        <div class="interactive-box">
-            <p>Prompt: "The best way to upskill in AI is to practice with..."</p>
-            <button class="btn" onclick="predictNext()">Predict Next Word</button>
-            <div id="out-11" class="output-box"></div>
-        </div>
-    </div>
-
-    <div class="step-container">
-        <h2><span class="step-badge">12</span> Deployment (Inference)</h2>
-        <p class="desc">Once trained, the weights are "frozen" and the model is deployed for users to query. This live prediction process is called <strong>Inference</strong>.</p>
-        <div class="interactive-box">
-            <input type="text" id="user-input" placeholder="Type a greeting..." style="padding: 10px; width: 60%; border: 1px solid #ccc; border-radius: 5px;">
-            <button class="btn" onclick="chatInference()">Send to Model</button>
-            <div id="out-12" class="output-box" style="background: #e0f2fe; border-color: #38bdf8;">Model Response: ...</div>
-        </div>
-    </div>
-
-</div>
-
-<footer>
-    <h2>UPSKILL IN AI | Observe with Satyam</h2>
-    <p>&copy; 2026 AI Masterclass. All rights reserved.</p>
-</footer>
-
-<script>
-    // Step 1
-    function showDef(step, text) {
-        document.getElementById(`out-${step}`).innerText = text;
-    }
-
-    // Step 2
-    let dataPoints = 0;
-    function collectData() {
-        if (dataPoints < 1000) {
-            dataPoints += 250;
-            document.getElementById('data-prog').style.width = (dataPoints / 10) + '%';
-            document.getElementById('out-2').innerText = `Data Points: ${dataPoints} / 1000`;
-        }
-    }
-
-    // Step 5
-    function trainModel() {
-        const btn = document.getElementById('train-btn');
-        const out = document.getElementById('out-5');
-        btn.disabled = true;
-        out.innerHTML = "Initializing weights...<br>";
+    <script>
+        // Tokenization Logic
+        const btnTokenize = document.getElementById('btn-tokenize');
+        const tokensDisplay = document.getElementById('tokens-display');
+        const rawText = document.getElementById('raw-text');
         
-        setTimeout(() => { out.innerHTML += "Epoch 1/3: Accuracy 45%...<br>"; }, 800);
-        setTimeout(() => { out.innerHTML += "Epoch 2/3: Accuracy 72%...<br>"; }, 1600);
-        setTimeout(() => { out.innerHTML += "Epoch 3/3: Accuracy 94%...<br><span style='color:green'>Training Complete!</span>"; btn.disabled = false; }, 2400);
-    }
+        btnTokenize.addEventListener('click', () => {
+            rawText.classList.add('opacity-50');
+            tokensDisplay.classList.remove('hidden');
+            
+            const words = ["Satyam", "helps", "you", "upskill", "in", "AI"];
+            tokensDisplay.innerHTML = ''; // Clear previous
+            
+            words.forEach((word, index) => {
+                setTimeout(() => {
+                    const tokenDiv = document.createElement('div');
+                    tokenDiv.className = 'px-4 py-3 rounded-lg border-2 border-slate-200 bg-white shadow-sm fade-in interactive-hover cursor-pointer';
+                    tokenDiv.innerHTML = `
+                        <span class="block font-semibold text-slate-800">${word}</span>
+                        <span class="block text-xs text-slate-400 mt-1">[Token ID: ${100 + index}]</span>
+                    `;
+                    tokensDisplay.appendChild(tokenDiv);
+                }, index * 200); // Stagger animation
+            });
+            
+            btnTokenize.innerText = "Tokenized Successfully!";
+            btnTokenize.classList.replace('bg-teal-500', 'bg-slate-800');
+        });
 
-    // Step 6
-    let currentLoss = 0.850;
-    function optimizeLoss() {
-        if(currentLoss > 0.05) {
-            currentLoss -= (Math.random() * 0.15);
-            if(currentLoss < 0.01) currentLoss = 0.01;
-            document.getElementById('loss-val').innerText = currentLoss.toFixed(3);
-        } else {
-            document.getElementById('loss-val').innerText = "0.010 (Optimized!)";
-            document.getElementById('loss-val').style.color = "green";
-        }
-    }
+        // Embeddings Logic
+        const embedBtns = document.querySelectorAll('.embed-btn');
+        const embedResult = document.getElementById('embedding-result');
 
-    // Step 11
-    function predictNext() {
-        const out = document.getElementById('out-11');
-        out.innerHTML = "Calculating probabilities...<br>";
-        setTimeout(() => {
-            out.innerHTML = "1. 'Satyam' (98.2%)<br>2. 'Data' (1.1%)<br>3. 'Code' (0.7%)<br><br><strong>Prediction: Satyam</strong>";
-        }, 1000);
-    }
+        embedBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Reset styling on all
+                embedBtns.forEach(b => {
+                    b.classList.remove('border-teal-500', 'bg-teal-50', 'text-teal-700');
+                    b.classList.add('border-slate-200', 'bg-white');
+                });
+                
+                // Highlight clicked
+                const target = e.target;
+                target.classList.remove('border-slate-200', 'bg-white');
+                target.classList.add('border-teal-500', 'bg-teal-50', 'text-teal-700');
+                
+                // Show vector
+                const vector = target.getAttribute('data-vec');
+                const word = target.innerText;
+                embedResult.innerHTML = `
+                    <div class="text-slate-800">
+                        Embedding for <strong class="text-teal-600">"${word}"</strong> = 
+                        <span class="font-mono bg-slate-100 px-2 py-1 rounded text-slate-600 tracking-wider">${vector}</span>
+                    </div>
+                `;
+            });
+        });
 
-    // Step 12
-    function chatInference() {
-        const val = document.getElementById('user-input').value;
-        const out = document.getElementById('out-12');
-        if(!val) {
-            out.innerText = "Please type something first.";
-            return;
-        }
-        out.innerText = "Model is thinking...";
-        setTimeout(() => {
-            out.innerText = `Model Response: Hello! You said "${val}". I am ready to help you upskill in AI with Observe with Satyam!`;
-        }, 800);
-    }
-</script>
+        // Flow Animation Logic
+        const btnPlay = document.getElementById('btn-play');
+        const btnReset = document.getElementById('btn-reset');
+        const steps = [
+            document.getElementById('flow-1'),
+            document.getElementById('flow-2'),
+            document.getElementById('flow-3'),
+            document.getElementById('flow-4')
+        ];
+        const statusText = document.getElementById('flow-status');
 
+        const stepMessages = [
+            "Reading raw user text into memory...",
+            "Converting words into high-dimensional vectors...",
+            "Multiplying Q, K, V matrices to apply contextual Attention...",
+            "Softmax applied. Generating final output response!"
+        ];
+
+        let playTimeouts = [];
+
+        btnPlay.addEventListener('click', () => {
+            btnPlay.disabled = true;
+            btnPlay.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            steps.forEach(s => s.classList.replace('opacity-100', 'opacity-30'));
+            
+            steps.forEach((step, i) => {
+                const timer = setTimeout(() => {
+                    // Dim previous step
+                    if (i > 0) steps[i-1].classList.replace('opacity-100', 'opacity-30');
+                    
+                    // Highlight current step
+                    step.classList.replace('opacity-30', 'opacity-100');
+                    step.classList.add('scale-110');
+                    setTimeout(() => step.classList.remove('scale-110'), 300);
+                    
+                    statusText.innerHTML = `<span class="text-teal-600 font-semibold">${stepMessages[i]}</span>`;
+                    
+                    if (i === steps.length - 1) {
+                        btnPlay.disabled = false;
+                        btnPlay.classList.remove('opacity-50', 'cursor-not-allowed');
+                        btnPlay.innerText = "▶ Re-play Animation";
+                    }
+                }, i * 1200);
+                playTimeouts.push(timer);
+            });
+        });
+
+        btnReset.addEventListener('click', () => {
+            playTimeouts.forEach(clearTimeout);
+            playTimeouts = [];
+            steps.forEach(s => s.classList.replace('opacity-100', 'opacity-30'));
+            statusText.innerText = "Ready to process...";
+            btnPlay.disabled = false;
+            btnPlay.classList.remove('opacity-50', 'cursor-not-allowed');
+            btnPlay.innerText = "▶ Play Animation";
+        });
+
+    </script>
 </body>
 </html>
 
