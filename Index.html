@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPSKILL IN AI | Observe with Satyam</title>
+    <style>
+        /* General Global Styles */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            color: #0f172a;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        header {
+            background-color: #ffffff;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+        .logo span {
+            color: #2dd4bf;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .badge {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Content Container */
+        .content {
+            max-width: 800px;
+            margin: 3rem auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+        }
+        h2 {
+            font-size: 1.8rem;
+            color: #0f172a;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+        }
+        p.desc {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Interactive Box Styles */
+        .interactive-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        .token-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .token-btn {
+            padding: 12px 24px;
+            background-color: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+        .token-btn:hover, .token-btn.active {
+            border-color: #2dd4bf;
+            color: #0f5f5f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(45, 212, 191, 0.2);
+        }
+        #result-display {
+            font-size: 1.1rem;
+            color: #0f172a;
+            min-height: 60px;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ffffff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 8px;
+        }
+
+        /* Neural Network Process Box */
+        .nn-box {
+            background-color: #fdf4ff;
+            border-color: #f0abfc;
+        }
+        .action-btn {
+            background-color: #c026d3;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .action-btn:hover {
+            background-color: #a21caf;
+        }
+        #network-steps {
+            margin-top: 20px;
+            text-align: left;
+            font-family: monospace;
+            color: #701a75;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #f0abfc;
+            min-height: 120px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #0f172a;
+            color: #94a3b8;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <div class="logo">Observe with <span>Satyam</span></div>
+    </div>
+</header>
+
+<section class="hero">
+    <span class="badge">AI Fundamentals Course</span>
+    <h1>UPSKILL IN AI</h1>
+    <p>Learn how machines "think" step by step. Interactive guide to tokens, embeddings, and neural networks.</p>
+</section>
+
+<div class="content">
+    <h2>1. Understanding Tokenization & Embeddings</h2>
+    <p class="desc">Before an AI model can read a sentence, it breaks it down into smaller pieces called <strong>Tokens</strong>. It then converts each token into an array of numbers called an <strong>Embedding Vector</strong>. Try clicking the words below.</p>
+    
+    <div class="interactive-box">
+        <div class="token-container">
+            <button class="token-btn" onclick="showEmbedding(this, 'Observe', '[0.82, -0.14, 0.91, 0.05]')">Observe</button>
+            <button class="token-btn" onclick="showEmbedding(this, 'with', '[0.01, 0.99, -0.23, 0.54]')">with</button>
+            <button class="token-btn" onclick="showEmbedding(this, 'Satyam', '[0.78, 0.11, 0.65, -0.88]')">Satyam</button>
+            <button class="token-btn" onclick="showEmbedding(this, 'to', '[-0.31, 0.44, 0.12, 0.89]')">to</button>
+            <button class="token-btn" onclick="showEmbedding(this, 'Upskill', '[0.95, 0.88, 0.72, 0.91]')">Upskill</button>
+        </div>
+        <div id="result-display"><em>Click a token above to see its mathematical representation!</em></div>
+    </div>
+
+    <h2>2. How Neural Networks Process Data</h2>
+    <p class="desc">A Neural Network is inspired by the human brain. It takes the numerical inputs (like the embeddings above), passes them through hidden layers applying mathematical weights, and outputs a prediction.</p>
+    
+    <div class="interactive-box nn-box">
+        <button class="action-btn" onclick="simulateNetwork()" id="run-btn">Run Data through Neural Network</button>
+        <div id="network-steps"><em>Awaiting data input...</em></div>
+    </div>
+</div>
+
+<div class="footer">
+    &copy; 2026 UPSKILL IN AI | Observe with Satyam. All rights reserved.
+</div>
+
+<script>
+    // Step 1 Logic
+    function showEmbedding(btnElement, word, vector) {
+        // Remove active class from all buttons
+        let buttons = document.querySelectorAll('.token-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to clicked button
+        btnElement.classList.add('active');
+
+        // Display the embedding
+        const display = document.getElementById('result-display');
+        display.innerHTML = `Embedding Vector for <strong>"${word}"</strong>: <br><br><span style="font-family: monospace; font-size: 1.4rem; color: #0d9488; background: #ccfbf1; padding: 5px 10px; border-radius: 4px;">${vector}</span>`;
+    }
+
+    // Step 2 Logic
+    function simulateNetwork() {
+        const btn = document.getElementById('run-btn');
+        const stepsContainer = document.getElementById('network-steps');
+        
+        // Disable button while running
+        btn.disabled = true;
+        btn.innerText = "Processing...";
+        btn.style.backgroundColor = "#d8b4fe";
+        
+        stepsContainer.innerHTML = "Initializing Network Graph...<br>";
+        
+        // Simulate step-by-step AI processing using Timeouts
+        setTimeout(() => { 
+            stepsContainer.innerHTML += "➔ <span style='color:#db2777'>Input Layer:</span> Received Vector [0.95, 0.88, 0.72, 0.91]<br>"; 
+        }, 800);
+        
+        setTimeout(() => { 
+            stepsContainer.innerHTML += "➔ <span style='color:#db2777'>Hidden Layer 1:</span> Applying Weights (W) & Biases (b)...<br>"; 
+        }, 1800);
+        
+        setTimeout(() => { 
+            stepsContainer.innerHTML += "➔ <span style='color:#db2777'>Hidden Layer 2:</span> Running Softmax Activation Function...<br>"; 
+        }, 2800);
+        
+        setTimeout(() => { 
+            stepsContainer.innerHTML += "<br>✅ <span style='color:#16a34a; font-weight:bold; font-size:1.1rem;'>Output Prediction Generated: 'SUCCESS' (Confidence: 99.8%)</span><br>"; 
+            
+            // Re-enable button
+            btn.disabled = false;
+            btn.innerText = "Run Data through Neural Network";
+            btn.style.backgroundColor = "#c026d3";
+        }, 3800);
+    }
+</script>
+
+</body>
+</html>
+
