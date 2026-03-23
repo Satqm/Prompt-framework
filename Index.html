@@ -2,330 +2,535 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPSKILL IN AI | Observe with Satyam</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Attention Mechanism: The Math Behind Transformers | Upskill in AI with Satyam</title>
+    <!-- Google Fonts for clean typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
-        .interactive-hover:hover { transform: scale(1.05); transition: transform 0.2s; }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* header branding */
+        .hero {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e3c72, #2b4f8c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: #334155;
+            margin-top: 0.5rem;
+        }
+        .badge {
+            display: inline-block;
+            background: #e2e8f0;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.8rem;
+        }
+
+        /* step cards */
+        .step-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            padding: 1.5rem 1.8rem;
+            transition: all 0.2s;
+            border: 1px solid #eef2f6;
+        }
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+        .step-number {
+            background: #1e4a76;
+            color: white;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .step-title h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+        .step-sub {
+            color: #2c3e66;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            border-left: 3px solid #3b82f6;
+            padding-left: 0.75rem;
+        }
+
+        /* interactive elements */
+        .token-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin: 1rem 0;
+        }
+        .token-chip {
+            background: #f1f5f9;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+        .token-chip:hover {
+            background: #e0e7ff;
+            border-color: #3b82f6;
+        }
+        .token-chip.active {
+            background: #1e4a76;
+            color: white;
+            border-color: #1e4a76;
+        }
+        .vector-preview {
+            background: #f1f5f9;
+            padding: 0.8rem 1rem;
+            border-radius: 1rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85rem;
+            margin-top: 0.8rem;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            max-width: 280px;
+            background: #f8fafc;
+            padding: 0.5rem;
+            border-radius: 12px;
+            margin: 0.5rem 0;
+        }
+        .matrix-cell {
+            background: white;
+            text-align: center;
+            padding: 6px 4px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+        }
+
+        .data-table {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            background: #fff;
+            border-radius: 16px;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #e2e8f0;
+            padding: 8px 10px;
+            text-align: center;
+        }
+        .data-table th {
+            background: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            margin-top: 1rem;
+        }
+        .heat-cell {
+            background: #eff6ff;
+            text-align: center;
+            padding: 10px 5px;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            transition: 0.1s;
+        }
+        .score-bar {
+            display: inline-block;
+            width: 100%;
+            font-size: 0.75rem;
+        }
+
+        .selected-info {
+            background: #eef2ff;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        button {
+            background: none;
+            border: none;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            color: #475569;
+        }
+        @media (max-width: 680px) {
+            .container { padding: 1rem; }
+            .step-card { padding: 1.2rem; }
+            .step-title h2 { font-size: 1.3rem; }
+        }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-800 min-h-screen flex flex-col">
+<body>
+<div class="container">
+    <div class="hero">
+        <h1>🧠 Attention Mechanism: The Math Behind Transformers</h1>
+        <p>Learn Q, K, V matrices, dot‑product attention & softmax — step by step, interactively</p>
+        <div class="badge">✨ Upskill in AI with Observe with Satyam ✨</div>
+    </div>
 
-    <header class="fixed top-0 left-0 right-0 z-40 bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="font-bold text-xl text-slate-800">
-                Observe with <span class="text-teal-500">Satyam</span>
-            </div>
-            <nav class="hidden md:flex gap-6 font-medium text-sm text-slate-600">
-                <a href="#" class="hover:text-teal-500">AI Fundamentals</a>
-                <a href="#" class="hover:text-teal-500">Masterclass</a>
-            </nav>
+    <!-- Step 1: Tokenization -->
+    <div class="step-card" id="step1">
+        <div class="step-title"><span class="step-number">1</span><h2>Tokenization</h2></div>
+        <p>We split the sentence into tokens. Each word becomes a token for simplicity.</p>
+        <div class="token-buttons" id="tokenListStep1"></div>
+        <div class="vector-preview" id="sentenceDisplay">📝 Sentence: "Crio helps you upskill in tech" → [Crio, helps, you, upskill, in, tech]</div>
+    </div>
+
+    <!-- Step 2: Token Embeddings (click to see vector) -->
+    <div class="step-card" id="step2">
+        <div class="step-title"><span class="step-number">2</span><h2>Token Embeddings</h2></div>
+        <p>Each token → 4‑dim vector. Click any token to see its embedding.</p>
+        <div class="token-buttons" id="embeddingTokens"></div>
+        <div id="embeddingDisplay" class="vector-preview">✨ Click a token above to view its embedding vector</div>
+    </div>
+
+    <!-- Step 3: The Problem - Why Q,K,V? (concept) -->
+    <div class="step-card">
+        <div class="step-title"><span class="step-number">3</span><h2>Why Q, K, V?</h2></div>
+        <p><strong>Query (Q)</strong>: "What am I looking for?" &nbsp;|&nbsp; <strong>Key (K)</strong>: "What do I offer?" &nbsp;|&nbsp; <strong>Value (V)</strong>: "Actual content to gather".<br>
+        Q and K compute attention scores, V provides the information to aggregate.</p>
+    </div>
+
+    <!-- Step 4: Computing Q, K, V via weight matrices -->
+    <div class="step-card">
+        <div class="step-title"><span class="step-number">4</span><h2>Computing Q, K, V (Matrix Multiplication)</h2></div>
+        <p>Each embedding × learned weight matrices → Q, K, V vectors. Below: computed values for every token.</p>
+        <div class="data-table">
+            <table id="qkvTable">
+                <thead><tr><th>Token</th><th>Q (4-dim)</th><th>K (4-dim)</th><th>V (4-dim)</th></tr></thead>
+                <tbody></tbody>
+            </table>
         </div>
-    </header>
+        <div class="step-sub">💡 Same operation, different weights — training learns W_Q, W_K, W_V.</div>
+    </div>
 
-    <section class="pt-28 pb-12 gradient-bg">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <span class="inline-block bg-white/20 text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
-                UPSKILL IN AI
-            </span>
-            <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">
-                AI Fundamentals & The Math Behind LLMs
-            </h1>
-            <p class="text-lg text-white/80 max-w-2xl mx-auto">
-                Learn how artificial intelligence works from scratch. A brilliant interactive flow explaining Tokenization, Embeddings, and Attention.
-            </p>
-        </div>
-    </section>
+    <!-- Step 5: Insight - It's all just W × E -->
+    <div class="step-card">
+        <div class="step-title"><span class="step-number">5</span><h2>The Key Insight</h2></div>
+        <p>Q = W_Q × E , K = W_K × E , V = W_V × E. The "magic" is in learned weights. Matrix multiplication is fixed, but weights are tuned via backpropagation.</p>
+    </div>
 
-    <section class="py-12 bg-white">
-        <div class="max-w-4xl mx-auto px-4 space-y-16">
+    <!-- Step 6: Attention Scores (Q·K / √d) interactive -->
+    <div class="step-card">
+        <div class="step-title"><span class="step-number">6</span><h2>Attention Scores</h2></div>
+        <p>For a <strong>query token</strong>, compute dot product with every token's Key, divided by √d (d=4 → √d=2).</p>
+        <label style="font-weight: 600;">Choose Query Token:</label>
+        <select id="queryTokenSelect" style="margin-left: 1rem; padding: 0.4rem 1rem; border-radius: 40px; border:1px solid #cbd5e1;"></select>
+        <div id="attentionScoresDisplay" class="selected-info" style="margin-top: 1rem;"></div>
+    </div>
 
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900 mb-4 border-b pb-2">Step 1: Tokenization</h2>
-                <p class="text-slate-600 mb-6">
-                    Before an AI can process text, it splits the sentence into smaller chunks called <strong>tokens</strong>. 
-                    Let's use the sentence: <strong class="text-slate-900">"Satyam helps you upskill in AI"</strong>
-                </p>
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center">
-                    <div class="text-lg font-semibold bg-white p-4 rounded-lg border-2 border-dashed border-slate-300 mb-6" id="raw-text">
-                        "Satyam helps you upskill in AI"
-                    </div>
-                    <button id="btn-tokenize" class="px-6 py-2.5 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-lg transition-colors mb-6">
-                        Run Tokenizer
-                    </button>
-                    <div id="tokens-display" class="hidden flex flex-wrap gap-3 justify-center fade-in">
-                        </div>
-                </div>
-            </div>
+    <!-- Step 7: Softmax Normalization -->
+    <div class="step-card">
+        <div class="step-title"><span class="step-number">7</span><h2>Softmax → Attention Weights</h2></div>
+        <p>Raw scores → probabilities (sum to 1). How much focus on each token.</p>
+        <div id="softmaxDisplay" class="selected-info"></div>
+    </div>
 
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900 mb-4 border-b pb-2">Step 2: Token Embeddings</h2>
-                <p class="text-slate-600 mb-6">
-                    AI models convert tokens into mathematical vectors (arrays of numbers) so they can understand relationships. Words with similar meanings have similar vectors.
-                </p>
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center">
-                    <div class="flex flex-wrap gap-3 justify-center mb-8" id="embedding-buttons">
-                        <button class="embed-btn px-4 py-2 rounded-lg font-semibold bg-white border-2 border-slate-200 text-slate-600 hover:border-teal-500" data-vec="[0.92, 0.14, -0.55, 0.88]">Satyam</button>
-                        <button class="embed-btn px-4 py-2 rounded-lg font-semibold bg-white border-2 border-slate-200 text-slate-600 hover:border-teal-500" data-vec="[0.11, 0.99, 0.23, -0.41]">helps</button>
-                        <button class="embed-btn px-4 py-2 rounded-lg font-semibold bg-white border-2 border-slate-200 text-slate-600 hover:border-teal-500" data-vec="[-0.85, 0.33, 0.91, 0.12]">you</button>
-                        <button class="embed-btn px-4 py-2 rounded-lg font-semibold bg-white border-2 border-slate-200 text-slate-600 hover:border-teal-500" data-vec="[0.77, 0.82, -0.19, 0.95]">upskill</button>
-                        <button class="embed-btn px-4 py-2 rounded-lg font-semibold bg-white border-2 border-slate-200 text-slate-600 hover:border-teal-500" data-vec="[0.91, 0.85, -0.15, 0.99]">AI</button>
-                    </div>
-                    <div id="embedding-result" class="text-slate-500 italic h-16 flex items-center justify-center bg-white border border-slate-200 rounded-lg">
-                        Click a token above to see its mathematical vector...
-                    </div>
-                </div>
-            </div>
+    <!-- Step 8: Full Attention Matrix (heatmap) -->
+    <div class="step-card">
+        <div class="step-title"><span class="step-number">8</span><h2>Full Attention Matrix</h2></div>
+        <p>Heatmap: rows = Query tokens, columns = Key tokens. Each row sums to 100%.</p>
+        <div id="heatmapContainer" style="overflow-x: auto;"></div>
+    </div>
 
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900 mb-4 border-b pb-2">Step 3: The Attention Mechanism</h2>
-                <p class="text-slate-600 mb-6">
-                    In modern AI (like Transformers), words look at other words to understand context. Let's see what the word <strong>"upskill"</strong> pays attention to in our sentence.
-                </p>
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="font-semibold text-slate-800 mb-4">Attention scores for the Query word: "upskill"</div>
-                    
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            <span class="w-20 font-medium text-slate-600 text-right">Satyam</span>
-                            <div class="flex-1 h-6 bg-slate-100 rounded overflow-hidden">
-                                <div class="h-full bg-teal-500 rounded" style="width: 35%;"></div>
-                            </div>
-                            <span class="w-12 text-sm font-mono text-slate-500">35%</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <span class="w-20 font-medium text-slate-600 text-right">helps</span>
-                            <div class="flex-1 h-6 bg-slate-100 rounded overflow-hidden">
-                                <div class="h-full bg-teal-500 rounded" style="width: 15%;"></div>
-                            </div>
-                            <span class="w-12 text-sm font-mono text-slate-500">15%</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <span class="w-20 font-medium text-slate-600 text-right">you</span>
-                            <div class="flex-1 h-6 bg-slate-100 rounded overflow-hidden">
-                                <div class="h-full bg-teal-500 rounded" style="width: 10%;"></div>
-                            </div>
-                            <span class="w-12 text-sm font-mono text-slate-500">10%</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <span class="w-20 font-medium text-slate-600 text-right">upskill</span>
-                            <div class="flex-1 h-6 bg-slate-100 rounded overflow-hidden">
-                                <div class="h-full bg-teal-500 rounded" style="width: 5%;"></div>
-                            </div>
-                            <span class="w-12 text-sm font-mono text-slate-500">5%</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <span class="w-20 font-medium text-teal-600 text-right">AI</span>
-                            <div class="flex-1 h-6 bg-slate-100 rounded overflow-hidden">
-                                <div class="h-full bg-teal-500 rounded" style="width: 95%;"></div>
-                            </div>
-                            <span class="w-12 text-sm font-mono text-slate-500 font-bold">95%</span>
-                        </div>
-                    </div>
-                    <div class="mt-6 p-4 bg-teal-50 rounded-lg border border-teal-100 text-sm text-teal-800">
-                        <strong>Insight:</strong> "upskill" pays the highest attention to "AI" because in this context, the specific skill being learned is AI.
-                    </div>
-                </div>
-            </div>
+    <!-- Step 9: Weighted Sum of V (Output) -->
+    <div class="step-card">
+        <div class="step-title"><span class="step-number">9</span><h2>Output = Attention Weights × V</h2></div>
+        <p>Contextualized embedding: weighted sum of Value vectors using attention probabilities.</p>
+        <label style="font-weight: 600;">Select token to see output:</label>
+        <select id="outputTokenSelect" style="margin-left: 1rem; padding: 0.4rem 1rem; border-radius: 40px;"></select>
+        <div id="outputVectorDisplay" class="selected-info"></div>
+    </div>
 
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900 mb-4 border-b pb-2">Step 4: The Complete Neural Flow</h2>
-                <p class="text-slate-600 mb-6">
-                    See how data flows from Raw Text into a Neural Network Prediction.
-                </p>
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                    <div class="flex justify-center gap-4 mb-8">
-                        <button id="btn-play" class="px-6 py-2 rounded-lg font-semibold bg-slate-800 text-white hover:bg-slate-700 transition-colors">
-                            ▶ Play Animation
-                        </button>
-                        <button id="btn-reset" class="px-6 py-2 rounded-lg font-semibold bg-white border border-slate-300 text-slate-600 hover:bg-slate-100 transition-colors">
-                            Reset
-                        </button>
-                    </div>
+    <!-- Step 10: Complete Flow animation summary -->
+    <div class="step-card">
+        <div class="step-title"><span class="step-number">10</span><h2>The Complete Attention Flow</h2></div>
+        <p>Embeddings → Q,K,V → Scores (Q·K/√d) → Softmax → Weighted sum of V → Contextual Embeddings.</p>
+        <div style="background:#eef2ff; border-radius: 20px; padding: 1rem; text-align: center; font-size:0.9rem;">⚡ [E] → Q,K,V → [Scores] → [Softmax] → [E'] = Attention(E)</div>
+    </div>
 
-                    <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
-                        
-                        <div id="flow-1" class="flow-step opacity-30 flex flex-col items-center transition-opacity duration-500">
-                            <div class="w-16 h-16 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xl font-bold border-2 border-teal-500 mb-2">1</div>
-                            <div class="text-sm font-semibold text-slate-800">Input Data</div>
-                        </div>
+    <!-- Step 11: From Attention to LLM -->
+    <div class="step-card">
+        <div class="step-title"><span class="step-number">11</span><h2>From Attention to LLM</h2></div>
+        <p>Real Transformers stack 96 layers, multi‑head attention, feed‑forward nets, residual connections & positional encoding. Attention is the core building block of GPT, BERT, etc.</p>
+    </div>
 
-                        <div class="hidden md:block text-slate-300 text-2xl">➔</div>
-                        <div class="md:hidden text-slate-300 text-2xl">⬇</div>
+    <!-- Step 12: How Does Reasoning Work? -->
+    <div class="step-card">
+        <div class="step-title"><span class="step-number">12</span><h2>Reasoning & Chain‑of‑Thought</h2></div>
+        <p>LLMs predict next token. Chain‑of‑Thought (CoT) breaks reasoning into steps, each step becomes context for the next prediction — easier than one giant leap.</p>
+        <div class="vector-preview">📌 Final formula: <strong>Attention(Q,K,V) = softmax(Q·Kᵀ / √d) · V</strong></div>
+    </div>
 
-                        <div id="flow-2" class="flow-step opacity-30 flex flex-col items-center transition-opacity duration-500">
-                            <div class="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold border-2 border-amber-500 mb-2">2</div>
-                            <div class="text-sm font-semibold text-slate-800">Embeddings</div>
-                        </div>
+    <footer>🧠 Interactive attention mechanics | Built for deep learning | Upskill with Satyam</footer>
+</div>
 
-                        <div class="hidden md:block text-slate-300 text-2xl">➔</div>
-                        <div class="md:hidden text-slate-300 text-2xl">⬇</div>
+<script>
+    // -------- DEFINE SENTENCE DATA ----------
+    const tokens = ["Crio", "helps", "you", "upskill", "in", "tech"];
+    // embeddings (4-dim) from reference
+    const embeddings = [
+        [0.8, 0.2, 0.5, 0.9],
+        [0.3, 0.7, 0.4, 0.2],
+        [0.6, 0.4, 0.8, 0.3],
+        [0.4, 0.9, 0.3, 0.7],
+        [0.2, 0.3, 0.6, 0.4],
+        [0.9, 0.5, 0.2, 0.8]
+    ];
+    const d_model = 4;
+    const sqrt_d = Math.sqrt(d_model); // =2
 
-                        <div id="flow-3" class="flow-step opacity-30 flex flex-col items-center transition-opacity duration-500">
-                            <div class="w-16 h-16 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xl font-bold border-2 border-purple-500 mb-2">3</div>
-                            <div class="text-sm font-semibold text-slate-800">Attention Layers</div>
-                        </div>
+    // Weight matrices (realistic for demo, producing interpretable attention)
+    const W_Q = [
+        [0.5, 0.3, 0.2, 0.4],
+        [0.2, 0.6, 0.3, 0.1],
+        [0.4, 0.2, 0.5, 0.3],
+        [0.3, 0.4, 0.2, 0.6]
+    ];
+    const W_K = [
+        [0.4, 0.2, 0.3, 0.1],
+        [0.5, 0.3, 0.2, 0.4],
+        [0.2, 0.4, 0.6, 0.1],
+        [0.3, 0.2, 0.4, 0.5]
+    ];
+    const W_V = [
+        [0.7, 0.1, 0.2, 0.3],
+        [0.2, 0.8, 0.1, 0.2],
+        [0.3, 0.1, 0.7, 0.2],
+        [0.1, 0.2, 0.3, 0.6]
+    ];
 
-                        <div class="hidden md:block text-slate-300 text-2xl">➔</div>
-                        <div class="md:hidden text-slate-300 text-2xl">⬇</div>
+    // helper: matrix multiplication (vector 1x4 * 4x4)
+    function matMulVec(vec, matrix) {
+        let result = [0,0,0,0];
+        for (let i=0; i<4; i++) {
+            let sum = 0;
+            for (let j=0; j<4; j++) {
+                sum += vec[j] * matrix[j][i];
+            }
+            result[i] = parseFloat(sum.toFixed(4));
+        }
+        return result;
+    }
 
-                        <div id="flow-4" class="flow-step opacity-30 flex flex-col items-center transition-opacity duration-500">
-                            <div class="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xl font-bold border-2 border-green-500 mb-2">4</div>
-                            <div class="text-sm font-semibold text-slate-800">Output Prediction</div>
-                        </div>
-                    </div>
+    // compute Q, K, V for all tokens
+    let Q_vectors = [], K_vectors = [], V_vectors = [];
+    for (let emb of embeddings) {
+        Q_vectors.push(matMulVec(emb, W_Q));
+        K_vectors.push(matMulVec(emb, W_K));
+        V_vectors.push(matMulVec(emb, W_V));
+    }
 
-                    <div id="flow-status" class="mt-8 text-center text-slate-500 font-mono h-8">
-                        Ready to process...
-                    </div>
-                </div>
-            </div>
+    // scores matrix: (i,j) = dot(Q_i, K_j) / sqrt_d
+    function dotProd(a,b) {
+        return a.reduce((s,val,idx)=> s + val*b[idx], 0);
+    }
+    let rawScores = Array(tokens.length).fill().map(()=>Array(tokens.length).fill(0));
+    for (let i=0; i<tokens.length; i++) {
+        for (let j=0; j<tokens.length; j++) {
+            let score = dotProd(Q_vectors[i], K_vectors[j]) / sqrt_d;
+            rawScores[i][j] = parseFloat(score.toFixed(4));
+        }
+    }
 
-            <div class="gradient-bg rounded-xl p-8 text-white mt-12">
-                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
-                    <span>🚀</span> UPSKILL IN AI Mastery
-                </h2>
-                <div class="bg-white/10 rounded-lg p-5 mb-6 font-mono text-center text-lg">
-                    LLM Prediction = Softmax( Q·Kᵀ / √d ) × V
-                </div>
-                <p class="text-slate-300">
-                    <strong class="text-white">TL;DR:</strong> 
-                    Artificial Intelligence reads text as numbers. It uses massive matrices of weights to multiply those numbers, calculating "attention" to understand context, and ultimately predicts the highest probability for the next word.
-                </p>
-            </div>
+    // softmax row-wise
+    function softmaxRow(row) {
+        const maxVal = Math.max(...row);
+        const exps = row.map(v => Math.exp(v - maxVal));
+        const sumExp = exps.reduce((a,b)=>a+b,0);
+        return exps.map(e => parseFloat((e/sumExp).toFixed(4)));
+    }
+    let attentionWeights = Array(tokens.length).fill().map((_,i)=> softmaxRow(rawScores[i]));
 
-        </div>
-    </section>
+    // compute output vectors: weighted sum of V
+    let outputVectors = [];
+    for (let i=0; i<tokens.length; i++) {
+        let out = [0,0,0,0];
+        for (let j=0; j<tokens.length; j++) {
+            let w = attentionWeights[i][j];
+            for (let d=0; d<4; d++) {
+                out[d] += w * V_vectors[j][d];
+            }
+        }
+        outputVectors.push(out.map(v=>parseFloat(v.toFixed(4))));
+    }
 
-    <footer class="bg-slate-900 text-white py-12 mt-auto">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <h3 class="text-xl font-bold mb-2">UPSKILL IN AI | Observe with Satyam</h3>
-            <p class="text-slate-400 text-sm">© 2026 AI Interactive Learning. All rights reserved.</p>
-        </div>
-    </footer>
+    // ---------------- RENDER UI ------------------
+    function renderTokenListStep1() {
+        const container = document.getElementById("tokenListStep1");
+        container.innerHTML = tokens.map((t,idx)=>`<div class="token-chip">${t} [${idx}]</div>`).join('');
+    }
 
-    <script>
-        // Tokenization Logic
-        const btnTokenize = document.getElementById('btn-tokenize');
-        const tokensDisplay = document.getElementById('tokens-display');
-        const rawText = document.getElementById('raw-text');
-        
-        btnTokenize.addEventListener('click', () => {
-            rawText.classList.add('opacity-50');
-            tokensDisplay.classList.remove('hidden');
-            
-            const words = ["Satyam", "helps", "you", "upskill", "in", "AI"];
-            tokensDisplay.innerHTML = ''; // Clear previous
-            
-            words.forEach((word, index) => {
-                setTimeout(() => {
-                    const tokenDiv = document.createElement('div');
-                    tokenDiv.className = 'px-4 py-3 rounded-lg border-2 border-slate-200 bg-white shadow-sm fade-in interactive-hover cursor-pointer';
-                    tokenDiv.innerHTML = `
-                        <span class="block font-semibold text-slate-800">${word}</span>
-                        <span class="block text-xs text-slate-400 mt-1">[Token ID: ${100 + index}]</span>
-                    `;
-                    tokensDisplay.appendChild(tokenDiv);
-                }, index * 200); // Stagger animation
-            });
-            
-            btnTokenize.innerText = "Tokenized Successfully!";
-            btnTokenize.classList.replace('bg-teal-500', 'bg-slate-800');
-        });
-
-        // Embeddings Logic
-        const embedBtns = document.querySelectorAll('.embed-btn');
-        const embedResult = document.getElementById('embedding-result');
-
-        embedBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                // Reset styling on all
-                embedBtns.forEach(b => {
-                    b.classList.remove('border-teal-500', 'bg-teal-50', 'text-teal-700');
-                    b.classList.add('border-slate-200', 'bg-white');
-                });
-                
-                // Highlight clicked
-                const target = e.target;
-                target.classList.remove('border-slate-200', 'bg-white');
-                target.classList.add('border-teal-500', 'bg-teal-50', 'text-teal-700');
-                
-                // Show vector
-                const vector = target.getAttribute('data-vec');
-                const word = target.innerText;
-                embedResult.innerHTML = `
-                    <div class="text-slate-800">
-                        Embedding for <strong class="text-teal-600">"${word}"</strong> = 
-                        <span class="font-mono bg-slate-100 px-2 py-1 rounded text-slate-600 tracking-wider">${vector}</span>
-                    </div>
-                `;
+    function renderEmbeddingClickable() {
+        const div = document.getElementById("embeddingTokens");
+        div.innerHTML = tokens.map((t,idx)=>`<div class="token-chip" data-idx="${idx}">${t}</div>`).join('');
+        document.querySelectorAll("#embeddingTokens .token-chip").forEach(el => {
+            el.addEventListener('click', (e) => {
+                const idx = parseInt(el.dataset.idx);
+                const vec = embeddings[idx];
+                document.getElementById("embeddingDisplay").innerHTML = `🔍 Embedding of <strong>${tokens[idx]}</strong> = [${vec.join(', ')}]`;
             });
         });
+    }
 
-        // Flow Animation Logic
-        const btnPlay = document.getElementById('btn-play');
-        const btnReset = document.getElementById('btn-reset');
-        const steps = [
-            document.getElementById('flow-1'),
-            document.getElementById('flow-2'),
-            document.getElementById('flow-3'),
-            document.getElementById('flow-4')
-        ];
-        const statusText = document.getElementById('flow-status');
+    function renderQKVTable() {
+        const tbody = document.querySelector("#qkvTable tbody");
+        tbody.innerHTML = '';
+        for (let i=0; i<tokens.length; i++) {
+            let row = tbody.insertRow();
+            row.insertCell(0).innerHTML = `<strong>${tokens[i]}</strong>`;
+            row.insertCell(1).innerHTML = `[${Q_vectors[i].join(', ')}]`;
+            row.insertCell(2).innerHTML = `[${K_vectors[i].join(', ')}]`;
+            row.insertCell(3).innerHTML = `[${V_vectors[i].join(', ')}]`;
+        }
+    }
 
-        const stepMessages = [
-            "Reading raw user text into memory...",
-            "Converting words into high-dimensional vectors...",
-            "Multiplying Q, K, V matrices to apply contextual Attention...",
-            "Softmax applied. Generating final output response!"
-        ];
+    function updateAttentionAndSoftmaxUI(selectedIdx) {
+        // scores for selected query
+        const scoresRow = rawScores[selectedIdx];
+        const tokensHtml = tokens.map((t,idx)=>`<div style="margin-bottom:6px;"><strong>${t}</strong>: score = ${scoresRow[idx]}</div>`).join('');
+        document.getElementById("attentionScoresDisplay").innerHTML = `
+            <div style="font-weight:600;">🔎 Attention scores for query <u>${tokens[selectedIdx]}</u> (Q·K/√d):</div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:8px;">${tokens.map((t,idx)=>`<div>${t}: ${scoresRow[idx]}</div>`).join('')}</div>
+        `;
+        // softmax
+        const softRow = attentionWeights[selectedIdx];
+        document.getElementById("softmaxDisplay").innerHTML = `
+            <div style="font-weight:600;">🧠 Softmax probabilities → Attention distribution:</div>
+            <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:8px;">${tokens.map((t,idx)=>`<div style="background:#e0e7ff; padding:4px 12px; border-radius:40px;">${t}: ${(softRow[idx]*100).toFixed(1)}%</div>`).join('')}</div>
+            <div class="vector-preview" style="margin-top:10px;">✅ Sum = ${softRow.reduce((a,b)=>a+b,0).toFixed(4)}</div>
+        `;
+    }
 
-        let playTimeouts = [];
+    function renderHeatmap() {
+        const container = document.getElementById("heatmapContainer");
+        // create matrix style
+        let html = `<div style="font-size:0.75rem; margin-bottom:0.5rem;">Rows = Query, Cols = Key</div><div class="heatmap-grid" style="grid-template-columns: 80px repeat(${tokens.length}, 1fr);">`;
+        html += `<div style="font-weight:bold;">Query\\Key</div>`;
+        tokens.forEach(t=>html+=`<div style="font-weight:bold; text-align:center;">${t}</div>`);
+        for (let i=0; i<tokens.length; i++) {
+            html += `<div style="font-weight:600;">${tokens[i]}</div>`;
+            for (let j=0; j<tokens.length; j++) {
+                let weight = attentionWeights[i][j];
+                let intensity = Math.floor(weight * 200 + 55);
+                let bg = `hsl(210, 80%, ${Math.min(70, 40 + weight*40)}%)`;
+                html += `<div class="heat-cell" style="background:${bg}; color:${weight>0.2?'white':'#0f172a'}">${(weight*100).toFixed(0)}%</div>`;
+            }
+        }
+        html += `</div>`;
+        container.innerHTML = html;
+    }
 
-        btnPlay.addEventListener('click', () => {
-            btnPlay.disabled = true;
-            btnPlay.classList.add('opacity-50', 'cursor-not-allowed');
-            
-            steps.forEach(s => s.classList.replace('opacity-100', 'opacity-30'));
-            
-            steps.forEach((step, i) => {
-                const timer = setTimeout(() => {
-                    // Dim previous step
-                    if (i > 0) steps[i-1].classList.replace('opacity-100', 'opacity-30');
-                    
-                    // Highlight current step
-                    step.classList.replace('opacity-30', 'opacity-100');
-                    step.classList.add('scale-110');
-                    setTimeout(() => step.classList.remove('scale-110'), 300);
-                    
-                    statusText.innerHTML = `<span class="text-teal-600 font-semibold">${stepMessages[i]}</span>`;
-                    
-                    if (i === steps.length - 1) {
-                        btnPlay.disabled = false;
-                        btnPlay.classList.remove('opacity-50', 'cursor-not-allowed');
-                        btnPlay.innerText = "▶ Re-play Animation";
-                    }
-                }, i * 1200);
-                playTimeouts.push(timer);
-            });
+    function updateOutputVector(selectedIdx) {
+        const outVec = outputVectors[selectedIdx];
+        const weightedSumDetails = tokens.map((t, j) => {
+            let w = attentionWeights[selectedIdx][j];
+            return `${t} (${(w*100).toFixed(0)}%) × [${V_vectors[j].join(',')}]`;
+        }).join('<br>');
+        document.getElementById("outputVectorDisplay").innerHTML = `
+            <div style="font-weight:600;">📤 Contextualized output for <strong>${tokens[selectedIdx]}</strong>:</div>
+            <div style="font-family: monospace; font-size:1rem; background:#fff; padding:12px; border-radius:16px;">[${outVec.join(', ')}]</div>
+            <details style="margin-top:12px;"><summary>⚙️ Weighted sum breakdown</summary><div style="font-size:0.8rem; margin-top:8px;">${weightedSumDetails}</div></details>
+        `;
+    }
+
+    function populateSelectors() {
+        const querySelect = document.getElementById("queryTokenSelect");
+        const outputSelect = document.getElementById("outputTokenSelect");
+        querySelect.innerHTML = tokens.map((t,i)=>`<option value="${i}">${t}</option>`).join('');
+        outputSelect.innerHTML = tokens.map((t,i)=>`<option value="${i}">${t}</option>`).join('');
+        querySelect.addEventListener('change', (e) => {
+            let idx = parseInt(e.target.value);
+            updateAttentionAndSoftmaxUI(idx);
         });
-
-        btnReset.addEventListener('click', () => {
-            playTimeouts.forEach(clearTimeout);
-            playTimeouts = [];
-            steps.forEach(s => s.classList.replace('opacity-100', 'opacity-30'));
-            statusText.innerText = "Ready to process...";
-            btnPlay.disabled = false;
-            btnPlay.classList.remove('opacity-50', 'cursor-not-allowed');
-            btnPlay.innerText = "▶ Play Animation";
+        outputSelect.addEventListener('change', (e) => {
+            let idx = parseInt(e.target.value);
+            updateOutputVector(idx);
         });
+        // initial
+        updateAttentionAndSoftmaxUI(2); // you
+        updateOutputVector(2);
+    }
 
-    </script>
+    // Step 2 and all dynamic
+    function initAll() {
+        renderTokenListStep1();
+        renderEmbeddingClickable();
+        renderQKVTable();
+        renderHeatmap();
+        populateSelectors();
+        // also add initial sentence preview
+        document.getElementById("sentenceDisplay").innerHTML = `📝 Sentence: "Crio helps you upskill in tech" → [${tokens.join(', ')}]`;
+    }
+
+    // extra tooltips for step 1 click, show token index
+    document.addEventListener('click', (e) => {
+        if(e.target.closest('#tokenListStep1') && e.target.classList.contains('token-chip')) {
+            const txt = e.target.innerText;
+            alert(`Token: ${txt}\nIndex: ${tokens.indexOf(txt.split(' ')[0])}`);
+        }
+    });
+
+    // also ensure that Step 6 selector updates when output token selection sync? but independent fine
+    initAll();
+</script>
 </body>
 </html>
-
