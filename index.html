@@ -13,16 +13,13 @@
   --text:#e2e8f0;--text-dim:#94a3b8;
   --card-bg:rgba(30,41,59,0.85);--border:rgba(0,212,200,0.18);
   --danger:#ef4444;--success:#10b981;--purple:#a855f7;
-  --bg-body:#0f172a;--bg-header:rgba(15,23,42,0.96);
-  --bg-footer:rgba(15,23,42,0.8);
-  transition:background .35s,color .35s;
+  --bg-header:rgba(15,23,42,0.96);
 }
 body.light-mode{
   --slate:#f0f4f8;--slate-mid:#e2e8f0;--slate-light:#cbd5e1;
   --text:#1e293b;--text-dim:#475569;
   --card-bg:rgba(255,255,255,0.92);--border:rgba(0,150,145,0.22);
-  --bg-body:#f0f4f8;--bg-header:rgba(240,244,248,0.97);
-  --bg-footer:rgba(240,244,248,0.9);
+  --bg-header:rgba(240,244,248,0.97);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -30,7 +27,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--slate);color:var(--
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;}
 
 /* ─── HEADER ─── */
-header{position:sticky;top:0;z-index:200;background:var(--bg-header,rgba(15,23,42,0.96));backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .35s;}
+header{position:sticky;top:0;z-index:200;background:var(--bg-header);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .35s;}
 .hdr{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:62px;padding:0 1.2rem;gap:1rem;}
 .brand{display:flex;align-items:center;gap:9px;text-decoration:none;}
 .brand-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--teal),var(--teal-dim));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;color:var(--slate);box-shadow:0 0 14px rgba(0,212,200,.45);}
@@ -448,104 +445,94 @@ header{position:sticky;top:0;z-index:200;background:var(--bg-header,rgba(15,23,4
 .lc-wow{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:800;margin-top:.9rem;padding:.7rem 1rem;border-radius:10px;background:rgba(0,0,0,.3);line-height:1.4;}
 
 
-/* ─── DARK/LIGHT TOGGLE ─── */
-.theme-toggle{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .25s;flex-shrink:0;}
+/* ─── THEME TOGGLE ─── */
+.theme-toggle{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.95rem;transition:all .25s;flex-shrink:0;}
 .theme-toggle:hover{border-color:var(--teal);color:var(--teal);background:rgba(0,212,200,.08);}
-body.light-mode .theme-toggle{border-color:rgba(0,150,145,.3);background:rgba(0,212,200,.07);}
+body.light-mode .card{background:rgba(255,255,255,0.95);}
+body.light-mode .card-hd{background:rgba(0,0,0,.04);}
+body.light-mode footer{border-top:1px solid rgba(0,0,0,.1);}
+body.light-mode .tab-btn:not(.active){border-color:rgba(0,0,0,.12);color:#475569;}
+body.light-mode .brand-name{color:#1e293b;}
+body.light-mode .explain-box{background:rgba(0,150,145,.05);}
+body.light-mode .formula-box{background:#e8f0fe;}
+body.light-mode .agent-terminal{background:#111;}
 
-/* ─── VENN CIRCULAR DIAGRAM ─── */
-.venn-circle-wrap{display:flex;align-items:center;justify-content:center;position:relative;width:100%;height:520px;margin:1.5rem auto 0;max-width:520px;}
-@media(max-width:600px){.venn-circle-wrap{display:none;}}
-.venn-mobile-cards{display:none;}
-@media(max-width:600px){.venn-mobile-cards{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:1rem 0 1.5rem;}}
-.vmc{border-radius:14px;padding:.8rem;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;border:1.5px solid;}
-.vmc:hover{transform:translateY(-3px) scale(1.02);}
-.vmc-num{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:.7rem;margin-bottom:.3rem;opacity:.8;}
-.vmc-name{font-family:'Syne',sans-serif;font-weight:800;font-size:.82rem;line-height:1.2;}
-.vmc-sub{font-size:.65rem;opacity:.6;margin-top:.15rem;}
+/* ─── VENN CIRCULAR ─── */
+.venn-circle-outer{display:flex;justify-content:center;align-items:center;margin:1.5rem auto 0;max-width:520px;position:relative;}
+@media(max-width:600px){.venn-circle-outer{display:none;}}
+.venn-mobile-stack{display:none;}
+@media(max-width:600px){.venn-mobile-stack{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:1rem 0 1.5rem;}}
+.vmc{border-radius:14px;padding:.85rem;cursor:pointer;transition:all .22s;border:1.5px solid;position:relative;overflow:hidden;}
+.vmc:hover{transform:translateY(-3px);}
+.vmc-num{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:.68rem;margin-bottom:.25rem;}
+.vmc-name{font-family:'Syne',sans-serif;font-weight:800;font-size:.8rem;line-height:1.2;}
+.vmc-sub{font-size:.62rem;opacity:.6;margin-top:.1rem;}
 
 /* ─── RESOURCES TAB ─── */
 .res-page{min-height:calc(100vh - 120px);position:relative;z-index:1;}
 .res-wrap{max-width:1060px;margin:0 auto;padding:2rem 1rem 4rem;}
-.res-hero{text-align:center;padding:2.5rem 0 1.8rem;}
-.res-hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,5vw,3rem);font-weight:800;background:linear-gradient(135deg,#fff 30%,var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:.8rem;line-height:1.1;}
-.res-section-title{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;margin:2.5rem 0 1.2rem;display:flex;align-items:center;gap:.6rem;border-left:4px solid var(--teal);padding-left:.85rem;}
-.repo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem;margin-bottom:2rem;}
+.res-section-title{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;margin:2.5rem 0 1.1rem;display:flex;align-items:center;gap:.6rem;border-left:4px solid var(--teal);padding-left:.85rem;}
+.cat-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.4rem;}
+.cat-tab{padding:.42rem 1rem;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-size:.78rem;font-weight:600;cursor:pointer;transition:all .22s;}
+.cat-tab.active,.cat-tab:hover{background:var(--teal);color:var(--slate);border-color:var(--teal);box-shadow:0 0 12px rgba(0,212,200,.25);}
+.repo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:1.2rem;margin-bottom:2rem;}
 @media(max-width:640px){.repo-grid{grid-template-columns:1fr;}}
-.repo-card{background:var(--card-bg);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:all .28s cubic-bezier(.34,1.56,.64,1);cursor:pointer;position:relative;backdrop-filter:blur(12px);}
-.repo-card:hover{transform:translateY(-5px);border-color:var(--teal);box-shadow:0 12px 40px rgba(0,212,200,.15);}
+.repo-card{background:var(--card-bg);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:all .25s;backdrop-filter:blur(12px);}
+.repo-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(0,212,200,.12);}
 .repo-card-top{padding:1.2rem 1.3rem 0;}
-.repo-badge{display:inline-flex;align-items:center;gap:.35rem;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.25rem .7rem;border-radius:999px;margin-bottom:.7rem;}
-.repo-name{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:.35rem;line-height:1.2;}
-.repo-tagline{font-size:.82rem;color:var(--text-dim);line-height:1.55;margin-bottom:.8rem;}
-.repo-card-expand{display:none;padding:0 1.3rem;overflow:hidden;transition:max-height .35s ease,opacity .3s;max-height:0;opacity:0;}
-.repo-card.open .repo-card-expand{display:block;max-height:400px;opacity:1;}
-.repo-usecase{background:rgba(0,212,200,.06);border:1px solid rgba(0,212,200,.18);border-left:4px solid var(--teal);border-radius:0 12px 12px 0;padding:.75rem 1rem;font-size:.82rem;line-height:1.6;color:var(--text-dim);margin-bottom:.7rem;}
+.repo-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.67rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.22rem .65rem;border-radius:999px;margin-bottom:.6rem;}
+.repo-name{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:.3rem;line-height:1.2;}
+.repo-tagline{font-size:.8rem;color:var(--text-dim);line-height:1.55;margin-bottom:.75rem;}
+.repo-expand{display:none;padding:0 1.3rem;}
+.repo-card.open .repo-expand{display:block;}
+.repo-usecase{background:rgba(0,212,200,.06);border:1px solid rgba(0,212,200,.18);border-left:4px solid var(--teal);border-radius:0 12px 12px 0;padding:.7rem 1rem;font-size:.8rem;line-height:1.6;color:var(--text-dim);margin-bottom:.65rem;}
 .repo-usecase strong{color:var(--text);}
-.repo-why{font-size:.8rem;color:var(--text-dim);line-height:1.55;margin-bottom:.8rem;padding:.6rem .8rem;background:rgba(255,209,102,.06);border:1px solid rgba(255,209,102,.15);border-radius:10px;}
+.repo-why{font-size:.78rem;color:var(--text-dim);line-height:1.55;margin-bottom:.75rem;padding:.55rem .75rem;background:rgba(255,209,102,.06);border:1px solid rgba(255,209,102,.15);border-radius:10px;}
 .repo-why strong{color:var(--gold);}
-.repo-card-foot{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.3rem 1.1rem;gap:.6rem;flex-wrap:wrap;}
-.repo-btn{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,var(--teal),var(--teal-dim));color:var(--slate);padding:.45rem 1.1rem;border-radius:999px;font-size:.78rem;font-weight:700;text-decoration:none;transition:all .2s;border:none;cursor:pointer;}
-.repo-btn:hover{transform:scale(1.04);box-shadow:0 0 16px rgba(0,212,200,.4);}
-.repo-expand-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:.4rem .9rem;border-radius:999px;font-size:.75rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.3rem;}
-.repo-expand-btn:hover{border-color:var(--teal);color:var(--teal);}
-.cat-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-.cat-tab{padding:.45rem 1rem;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .22s;}
-.cat-tab.active,.cat-tab:hover{background:var(--teal);color:var(--slate);border-color:var(--teal);box-shadow:0 0 14px rgba(0,212,200,.28);}
+.repo-foot{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.3rem 1.1rem;gap:.5rem;flex-wrap:wrap;}
+.repo-btn{display:inline-flex;align-items:center;gap:.4rem;color:var(--slate);padding:.42rem 1.1rem;border-radius:999px;font-size:.76rem;font-weight:700;text-decoration:none;transition:all .2s;border:none;cursor:pointer;}
+.repo-btn:hover{transform:scale(1.04);}
+.repo-more-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:.38rem .85rem;border-radius:999px;font-size:.73rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.3rem;}
+.repo-more-btn:hover{border-color:var(--teal);color:var(--teal);}
 
-/* ─── COURSE CARDS ─── */
+/* ─── COURSES ─── */
 .course-cat{margin-bottom:2rem;}
-.course-cat-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;color:var(--gold);}
-.course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
-@media(max-width:620px){.course-grid{grid-template-columns:1fr;}}
+.course-cat-label{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;margin-bottom:.9rem;display:flex;align-items:center;gap:.5rem;}
+.course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem;}
+@media(max-width:600px){.course-grid{grid-template-columns:1fr;}}
 .course-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:1.2rem;transition:all .25s;backdrop-filter:blur(12px);}
-.course-card:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 28px rgba(255,209,102,.1);}
+.course-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(255,209,102,.1);}
 .course-icon{font-size:1.6rem;margin-bottom:.5rem;}
-.course-title{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;margin-bottom:.35rem;line-height:1.3;}
-.course-desc{font-size:.8rem;color:var(--text-dim);line-height:1.55;margin-bottom:.7rem;}
-.course-why{font-size:.75rem;padding:.45rem .7rem;background:rgba(255,209,102,.06);border:1px solid rgba(255,209,102,.15);border-radius:8px;color:var(--text-dim);margin-bottom:.8rem;line-height:1.5;}
+.course-title{font-family:'Syne',sans-serif;font-size:.93rem;font-weight:800;margin-bottom:.35rem;line-height:1.3;}
+.course-desc{font-size:.79rem;color:var(--text-dim);line-height:1.55;margin-bottom:.65rem;}
+.course-why{font-size:.75rem;padding:.42rem .7rem;background:rgba(255,209,102,.06);border:1px solid rgba(255,209,102,.15);border-radius:8px;color:var(--text-dim);margin-bottom:.75rem;line-height:1.5;}
 .course-why strong{color:var(--gold);}
-.course-btn{display:inline-flex;align-items:center;gap:.4rem;background:transparent;border:1.5px solid var(--gold);color:var(--gold);padding:.4rem 1rem;border-radius:999px;font-size:.76rem;font-weight:700;text-decoration:none;transition:all .2s;}
-.course-btn:hover{background:var(--gold);color:var(--slate);}
+.course-btn{display:inline-flex;align-items:center;gap:.4rem;background:transparent;padding:.38rem .95rem;border-radius:999px;font-size:.74rem;font-weight:700;text-decoration:none;transition:all .2s;border:1.5px solid;}
+.course-btn:hover{transform:scale(1.04);}
 
 /* ─── PLAYLIST BANNER ─── */
-.playlist-banner{position:relative;overflow:hidden;border-radius:24px;padding:2.5rem 2rem;margin:2.5rem 0;background:linear-gradient(135deg,#ff0000 0%,#c0392b 30%,#1a0a00 70%,#0f172a 100%);border:1px solid rgba(255,0,0,.3);box-shadow:0 20px 60px rgba(255,0,0,.2);}
-.playlist-banner::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(255,80,0,.15),transparent 70%);pointer-events:none;}
-.playlist-banner::after{content:'';position:absolute;bottom:-60px;left:-60px;width:250px;height:250px;background:radial-gradient(circle,rgba(255,0,0,.1),transparent 70%);pointer-events:none;}
-.pb-inner{position:relative;z-index:1;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;}
-.pb-icon{width:72px;height:72px;background:#FF0000;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;box-shadow:0 0 30px rgba(255,0,0,.5);animation:ytPulse 2.2s ease-in-out infinite;}
+.playlist-banner{position:relative;overflow:hidden;border-radius:22px;padding:2.2rem 2rem;margin:2rem 0;background:linear-gradient(135deg,#c0392b 0%,#450000 50%,#0f172a 100%);border:1px solid rgba(255,0,0,.3);box-shadow:0 16px 50px rgba(255,0,0,.18);}
+.pb-inner{position:relative;z-index:1;display:flex;align-items:center;gap:1.8rem;flex-wrap:wrap;}
+.pb-yt-icon{width:66px;height:66px;background:#FF0000;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.9rem;flex-shrink:0;box-shadow:0 0 26px rgba(255,0,0,.5);animation:ytPulse 2.2s ease-in-out infinite;}
 .pb-text{flex:1;}
-.pb-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,150,130,.8);margin-bottom:.3rem;}
-.pb-title{font-family:'Syne',sans-serif;font-size:clamp(1.3rem,3vw,2rem);font-weight:800;color:#fff;line-height:1.2;margin-bottom:.5rem;}
-.pb-sub{font-size:.88rem;color:rgba(255,220,210,.75);line-height:1.5;max-width:480px;}
-.pb-btn{display:inline-flex;align-items:center;gap:.5rem;background:#FF0000;color:#fff;padding:.7rem 1.8rem;border-radius:999px;font-weight:800;font-size:.9rem;text-decoration:none;margin-top:1rem;box-shadow:0 0 24px rgba(255,0,0,.5);transition:all .2s;}
-.pb-btn:hover{background:#cc0000;transform:scale(1.04);}
-@media(max-width:500px){.pb-inner{gap:1rem;}.pb-icon{width:52px;height:52px;font-size:1.4rem;}.pb-title{font-size:1.2rem;}}
+.pb-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,160,130,.85);margin-bottom:.3rem;}
+.pb-title{font-family:'Syne',sans-serif;font-size:clamp(1.25rem,3vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;margin-bottom:.4rem;}
+.pb-sub{font-size:.85rem;color:rgba(255,210,200,.75);line-height:1.5;max-width:460px;}
+.pb-watch-btn{display:inline-flex;align-items:center;gap:.5rem;background:#FF0000;color:#fff;padding:.65rem 1.7rem;border-radius:999px;font-weight:800;font-size:.88rem;text-decoration:none;margin-top:.9rem;box-shadow:0 0 22px rgba(255,0,0,.45);transition:all .2s;}
+.pb-watch-btn:hover{background:#cc0000;transform:scale(1.04);}
+@media(max-width:480px){.pb-inner{gap:.9rem;}.pb-yt-icon{width:48px;height:48px;font-size:1.4rem;}}
 
-/* ─── GOOGLE DRIVE CARD ─── */
-.drive-card{background:var(--card-bg);border:1px solid rgba(66,133,244,.3);border-radius:22px;padding:2rem;display:flex;align-items:center;gap:1.5rem;text-decoration:none;transition:all .28s;backdrop-filter:blur(12px);margin-top:2rem;}
-.drive-card:hover{transform:translateY(-4px);border-color:rgba(66,133,244,.6);box-shadow:0 12px 40px rgba(66,133,244,.15);}
-.drive-icon{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#4285F4,#34A853);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;box-shadow:0 0 24px rgba(66,133,244,.4);}
+/* ─── DRIVE CARD ─── */
+.drive-card{background:var(--card-bg);border:1px solid rgba(66,133,244,.3);border-radius:20px;padding:1.8rem;display:flex;align-items:center;gap:1.4rem;text-decoration:none;transition:all .25s;backdrop-filter:blur(12px);margin-top:.5rem;}
+.drive-card:hover{transform:translateY(-4px);border-color:rgba(66,133,244,.6);box-shadow:0 12px 36px rgba(66,133,244,.15);}
+.drive-icon-box{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#4285F4,#34A853);display:flex;align-items:center;justify-content:center;font-size:1.7rem;flex-shrink:0;box-shadow:0 0 22px rgba(66,133,244,.35);}
 .drive-text{flex:1;}
-.drive-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4285F4;margin-bottom:.3rem;}
-.drive-title{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--text);margin-bottom:.3rem;}
-.drive-sub{font-size:.83rem;color:var(--text-dim);line-height:1.5;}
-.drive-arrow{font-size:1.3rem;color:#4285F4;opacity:.7;transition:transform .2s;}
+.drive-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#4285F4;margin-bottom:.25rem;}
+.drive-title{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:.25rem;}
+.drive-sub{font-size:.8rem;color:var(--text-dim);line-height:1.5;}
+.drive-arrow{font-size:1.2rem;color:#4285F4;opacity:.7;transition:transform .2s;}
 .drive-card:hover .drive-arrow{transform:translateX(4px);opacity:1;}
-
-/* ─── LIGHT MODE OVERRIDES ─── */
-body.light-mode .card{background:rgba(255,255,255,0.95);border-color:rgba(0,150,145,.18);}
-body.light-mode .card-hd{background:rgba(0,0,0,.04);}
-body.light-mode .repo-card,.body.light-mode .course-card{background:rgba(255,255,255,0.95);}
-body.light-mode header{background:rgba(240,244,248,0.97);}
-body.light-mode .tab-btn:not(.active){border-color:rgba(0,0,0,.12);color:#475569;}
-body.light-mode .brand-name{color:#1e293b;}
-body.light-mode .explain-box{background:rgba(0,150,145,.06);border-color:rgba(0,150,145,.2);}
-body.light-mode .formula-box{background:#e8f0fe;border-color:rgba(0,150,145,.2);}
-body.light-mode .agent-terminal{background:#1a1a2e;border-color:rgba(0,212,200,.25);}
-body.light-mode footer{background:rgba(220,230,240,.9);border-color:rgba(0,0,0,.1);}
-body.light-mode .footer-brand,.body.light-mode .footer-inner{color:#1e293b;}
-body.light-mode .drive-card{background:rgba(255,255,255,0.95);}
+@media(max-width:480px){.drive-card{flex-wrap:wrap;}.drive-arrow{display:none;}}
 
 /* ─── FOOTER ─── */
 footer{border-top:1px solid var(--border);padding:2rem 1rem;text-align:center;color:var(--text-dim);font-size:.82rem;position:relative;z-index:1;background:rgba(15,23,42,.8);}
@@ -573,7 +560,7 @@ footer{border-top:1px solid var(--border);padding:2rem 1rem;text-align:center;co
         <a href="https://www.linkedin.com/in/satyam-kumar5286o" target="_blank"><i class="fab fa-linkedin-in"></i></a>
         <a href="https://t.me/CA_Protracker" target="_blank"><i class="fab fa-telegram-plane"></i></a>
       </div>
-      <button class="theme-toggle" id="theme-toggle" title="Toggle Light/Dark Mode" onclick="toggleTheme()"><i class="fas fa-moon" id="theme-icon"></i></button>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark"><i class="fas fa-moon" id="theme-icon"></i></button>
       <a href="https://youtube.com/@observe_with_satyam" target="_blank" class="yt-btn">
         <i class="fab fa-youtube"></i> Subscribe
       </a>
@@ -1039,25 +1026,18 @@ footer{border-top:1px solid var(--border);padding:2rem 1rem;text-align:center;co
     <p style="color:var(--text-dim);font-size:.95rem;max-width:560px;margin:.8rem auto 0;line-height:1.7;">From the abstract idea of AI to the product in your pocket — 10 nested layers, each building on the last. The outermost ring is the broadest concept; the innermost is the most specific product.</p>
   </div>
 
-  <!-- ── VENN DIAGRAM: true circular nested rings on desktop, cards on mobile ── -->
-  <div style="text-align:center;font-size:.82rem;color:var(--text-dim);margin-bottom:.4rem;">
-    <i class="fas fa-circle-info" style="color:var(--teal);"></i> Hover any ring for a preview · Outer = broadest concept (AI) · Inner = most specific product (ChatGPT)
+  <div style="text-align:center;font-size:.8rem;color:var(--text-dim);margin-bottom:.4rem;">
+    <i class="fas fa-circle-info" style="color:var(--teal);"></i> Click any ring to expand its details below · Outer = broadest (AI) · Inner = most specific (ChatGPT)
   </div>
-
-  <!-- DESKTOP: True circular venn diagram -->
-  <div class="venn-circle-wrap" id="venn-circle-wrap">
-    <svg id="venn-svg" width="500" height="500" viewBox="0 0 500 500" style="overflow:visible;"></svg>
-    <div id="venn-center-label" style="position:absolute;text-align:center;pointer-events:none;"></div>
+  <!-- Desktop: true circular venn -->
+  <div class="venn-circle-outer" id="venn-circle-outer">
+    <svg id="venn-svg" width="500" height="500" viewBox="0 0 500 500" style="overflow:visible;display:block;"></svg>
   </div>
-
-  <!-- MOBILE: Stacked cards -->
-  <div class="venn-mobile-cards" id="venn-mobile-cards"></div>
+  <!-- Mobile: stacked mini cards -->
+  <div class="venn-mobile-stack" id="venn-mobile-stack"></div>
   <div id="venn-tooltip" class="venn-tooltip"></div>
-
-  <!-- Keep the original venn-stack hidden for click functionality -->
-  <div class="venn-section" id="venn-section" style="display:none;">
-    <div class="venn-stack" id="venn-stack"></div>
-  </div>
+  <!-- Hidden stack for click target -->
+  <div style="display:none;"><div class="venn-stack" id="venn-stack"></div></div>
 
   <!-- FLOW CARDS -->
   <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin:2rem 0 1rem;border-left:4px solid var(--teal);padding-left:.8rem;">
@@ -1487,100 +1467,7 @@ const layersData=[
   {title:'ChatGPT',subtitle:'The Product',color:'#00d4c8',bg:'rgba(0,212,200,.09)',tagline:'THE APP YOU USE',desc:'ChatGPT is the consumer product built on top of GPT models. It adds the chat interface, memory management, plugin/tool system, safety layers, and billing infrastructure. The model is the engine; ChatGPT is the car.',input:'Your message (natural language)',process:'UI · session memory · safety filters · GPT-4o API call',output:'The AI assistant you interact with — available to 200M+ users!',examples:['Web interface','Mobile app','GPT Store','API access','Enterprise ChatGPT'],wow:'ChatGPT reached 100 million users in 2 months — the fastest product adoption in history. Compare: Instagram took 2.5 years, Netflix took 10 years.'}
 ];
 
-
-// ════════════════════════════════════════════════════════
-//  CIRCULAR VENN DIAGRAM (DESKTOP)
-// ════════════════════════════════════════════════════════
-function renderCircularVenn(){
-  const svg=document.getElementById('venn-svg');
-  if(!svg||svg.children.length>2)return;
-  const cx=250,cy=250;
-  const maxR=230;
-  const minR=22;
-  const n=layersData.length;
-  const tooltip=document.getElementById('venn-tooltip');
-
-  layersData.slice().reverse().forEach((l,ri)=>{
-    const idx=n-1-ri;
-    const r=minR+(maxR-minR)*((n-idx-1)/(n-1));
-    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    circle.setAttribute('cx',cx);circle.setAttribute('cy',cy);circle.setAttribute('r',r);
-    circle.setAttribute('fill',l.color+'22');
-    circle.setAttribute('stroke',l.color);
-    circle.setAttribute('stroke-width',idx===0?2.5:1.8);
-    circle.setAttribute('opacity','0.92');
-    circle.style.cursor='pointer';
-    circle.style.transition='all .25s';
-
-    circle.addEventListener('mouseenter',(e)=>{
-      circle.setAttribute('fill',l.color+'44');
-      circle.setAttribute('stroke-width','3.5');
-      tooltip.style.borderColor=l.color;
-      tooltip.innerHTML=`<div class="venn-tooltip-title" style="color:${l.color};">${idx+1}. ${l.title}</div><div style="color:var(--text-dim);font-size:.79rem;line-height:1.5;">${l.tagline||l.subtitle} — ${l.desc.substring(0,110)}…</div>`;
-      tooltip.classList.add('show');
-    });
-    circle.addEventListener('mousemove',(e)=>{
-      tooltip.style.left=(e.clientX+14)+'px';
-      tooltip.style.top=(e.clientY-20)+'px';
-    });
-    circle.addEventListener('mouseleave',()=>{
-      circle.setAttribute('fill',l.color+'22');
-      circle.setAttribute('stroke-width',idx===0?2.5:1.8);
-      tooltip.classList.remove('show');
-    });
-    circle.addEventListener('click',()=>{
-      renderVennStack();renderLayerCards();
-      const card=document.getElementById('layer-cards').querySelector(`[data-layer="${idx}"]`);
-      if(card){setTimeout(()=>{card.scrollIntoView({behavior:'smooth',block:'center'});card.click();},100);}
-    });
-    svg.appendChild(circle);
-
-    // Label — only show for outer rings + innermost
-    if(idx===0||idx===n-1||idx===Math.floor(n/2)){
-      const angle=(idx===0)?-Math.PI/2:(idx===n-1)?-Math.PI/2:Math.PI/4;
-      const lx=cx+Math.cos(angle)*(r-18);
-      const ly=cy+Math.sin(angle)*(r-18);
-      const text=document.createElementNS('http://www.w3.org/2000/svg','text');
-      text.setAttribute('x',lx);text.setAttribute('y',ly);
-      text.setAttribute('text-anchor','middle');text.setAttribute('dominant-baseline','middle');
-      text.setAttribute('fill',l.color);
-      text.setAttribute('font-size',idx===0?'13':'11');
-      text.setAttribute('font-weight','800');
-      text.setAttribute('font-family','Syne,sans-serif');
-      text.setAttribute('pointer-events','none');
-      text.textContent=l.title;
-      svg.appendChild(text);
-    }
-  });
-
-  // Center label
-  const centerLabel=document.getElementById('venn-center-label');
-  if(centerLabel){
-    const last=layersData[layersData.length-1];
-    centerLabel.innerHTML=`<div style="font-family:'Syne',sans-serif;font-size:.75rem;font-weight:800;color:${last.color};">${last.title}</div><div style="font-size:.6rem;color:var(--text-dim);">${last.subtitle}</div>`;
-    centerLabel.style.cssText='position:absolute;text-align:center;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%);';
-  }
-}
-
-function renderVennMobileCards(){
-  const cont=document.getElementById('venn-mobile-cards');
-  if(!cont||cont.children.length>0)return;
-  layersData.forEach((l,idx)=>{
-    const card=document.createElement('div');
-    card.className='vmc';
-    card.style.cssText=`background:${l.bg};border-color:${l.color}50;`;
-    card.innerHTML=`<div class="vmc-num" style="color:${l.color};">${idx+1}</div><div class="vmc-name" style="color:${l.color};">${l.title}</div><div class="vmc-sub">${l.subtitle}</div>`;
-    card.addEventListener('click',()=>{
-      renderVennStack();renderLayerCards();
-      const lcard=document.getElementById('layer-cards').querySelector(`[data-layer="${idx}"]`);
-      if(lcard){setTimeout(()=>{lcard.scrollIntoView({behavior:'smooth',block:'center'});lcard.click();},100);}
-    });
-    cont.appendChild(card);
-  });
-}
-
 function renderVennStack(){
-
   const stack=document.getElementById('venn-stack');
   const tooltip=document.getElementById('venn-tooltip');
   if(!stack||stack.children.length>0)return;
@@ -1667,8 +1554,8 @@ function switchTab(tab){
   if(tab==='safety')renderSafety();
   if(tab==='concepts')renderConcepts();
   if(tab==='pyramid')setTimeout(renderPyramid,60);
-  if(tab==='layers')setTimeout(()=>{renderCircularVenn();renderVennMobileCards();renderVennStack();renderLayerCards();},60);
-  if(tab==='resources')setTimeout(()=>{renderRepos();renderCourseSection();},60);
+  if(tab==='layers')setTimeout(()=>{renderCircularVenn();renderVennMobile();renderVennStack();renderLayerCards();},60);
+  if(tab==='resources')setTimeout(()=>{renderRepos();renderCourses();},60);
   window.scrollTo(0,0);
 }
 
@@ -1683,125 +1570,244 @@ renderConcepts();   // concepts is the default active tab now
 //  THEME TOGGLE
 // ════════════════════════════════════════════════════════
 function toggleTheme(){
-  const body=document.body;
-  body.classList.toggle('light-mode');
-  const icon=document.getElementById('theme-icon');
-  if(body.classList.contains('light-mode')){
-    icon.className='fas fa-sun';
-    localStorage.setItem('theme','light');
-  }else{
-    icon.className='fas fa-moon';
-    localStorage.setItem('theme','dark');
+  document.body.classList.toggle('light-mode');
+  const icon = document.getElementById('theme-icon');
+  if(document.body.classList.contains('light-mode')){
+    icon.className = 'fas fa-sun';
+    try{localStorage.setItem('owsTheme','light');}catch(e){}
+  } else {
+    icon.className = 'fas fa-moon';
+    try{localStorage.setItem('owsTheme','dark');}catch(e){}
   }
 }
 (function(){
-  const saved=localStorage.getItem('theme');
-  if(saved==='light'){
-    document.body.classList.add('light-mode');
-    const icon=document.getElementById('theme-icon');
-    if(icon)icon.className='fas fa-sun';
-  }
+  try{
+    if(localStorage.getItem('owsTheme')==='light'){
+      document.body.classList.add('light-mode');
+      var icon=document.getElementById('theme-icon');
+      if(icon) icon.className='fas fa-sun';
+    }
+  }catch(e){}
 })();
 
 // ════════════════════════════════════════════════════════
-//  RESOURCES: REPOS DATA
+//  CIRCULAR VENN DIAGRAM
 // ════════════════════════════════════════════════════════
-const reposData=[
-  {cat:"agents",color:"#a855f7",icon:"🦞",name:"OpenClaw",tagline:"AI assistant that lives on your device and executes tasks autonomously.",url:"https://github.com/openclaw/openclaw",
-   usecase:"<strong>Real-World Use:</strong> Imagine having an AI that can open your browser, search for the best flight, fill in your details, and book it — all while you watch. OpenClaw does this across your native apps without needing APIs or custom code.",
-   why:"<strong>Why It Matters in 2026:</strong> As computer-use AI goes mainstream, OpenClaw represents the category of personal autonomous agents that work offline on your own hardware — privacy-first automation."},
-  {cat:"agents",color:"#6366f1",icon:"👥",name:"CrewAI",tagline:"Orchestrate role-playing, autonomous multi-agent AI teams.",url:"https://github.com/crewAIInc/crewAI",
-   usecase:"<strong>Real-World Use:</strong> You want to analyze a startup market. You assign a Research Agent (searches web), a Data Agent (crunches numbers), and a Writer Agent (drafts report). CrewAI makes them collaborate like a real team.",
-   why:"<strong>Why It Matters in 2026:</strong> Single agents fail on complex tasks. Multi-agent teams with specialized roles achieve dramatically higher reliability — this is the standard pattern for production AI systems."},
-  {cat:"agents",color:"#00d4c8",icon:"⌨️",name:"Claude Code",tagline:"Anthropic agentic CLI tool to understand and edit entire codebases.",url:"https://github.com/anthropics/claude-code",
-   usecase:"<strong>Real-World Use:</strong> A developer types refactor this entire codebase to use async/await — Claude Code reads every file, understands the architecture, makes changes across hundreds of files, and runs tests. Like a senior engineer in your terminal.",
-   why:"<strong>Why It Matters in 2026:</strong> AI coding is the fastest-growing use case. Claude Code represents the shift from a chatbot that writes snippets to an autonomous coding agent with full project context."},
-  {cat:"models",color:"#22c55e",icon:"🦙",name:"Ollama",tagline:"The easiest way to run powerful LLMs locally on your own hardware.",url:"https://github.com/ollama/ollama",
-   usecase:"<strong>Real-World Use:</strong> A doctor runs patient data analysis entirely on a laptop with no internet connection, using LLaMA 3. Zero cloud costs, zero privacy risk. Ollama makes local LLM deployment as simple as one terminal command.",
-   why:"<strong>Why It Matters in 2026:</strong> Privacy regulations (GDPR, HIPAA) and cost pressures are driving enterprises to run AI locally. Ollama is the tool that makes this accessible to non-researchers."},
-  {cat:"models",color:"#06b6d4",icon:"🔬",name:"DeepSeek-V3",tagline:"Highly efficient open-weight model dominating the AI benchmarks.",url:"https://github.com/deepseek-ai/DeepSeek-V3",
-   usecase:"<strong>Real-World Use:</strong> A startup needs GPT-4 level intelligence at 5% of the cost. DeepSeek-V3 gives them that — a fully open model they can fine-tune, self-host, and modify without paying per-token API fees.",
-   why:"<strong>Why It Matters in 2026:</strong> The open-source vs closed-source model war is defining AI's future. DeepSeek proved that open models can match closed ones — accelerating access for everyone."},
-  {cat:"models",color:"#f59e0b",icon:"⚡",name:"vLLM",tagline:"High-throughput, memory-efficient LLM inference and serving engine.",url:"https://github.com/vllm-project/vllm",
-   usecase:"<strong>Real-World Use:</strong> A company needs to serve 10,000 concurrent users on their AI chatbot without buying 50 GPU servers. vLLM PagedAttention technology lets one server do the work of many by intelligently managing GPU memory.",
-   why:"<strong>Why It Matters in 2026:</strong> Scaling AI inference efficiently is now a competitive advantage. vLLM is the industry standard for production LLM serving, used by every major AI company."},
-  {cat:"frameworks",color:"#3b82f6",icon:"🔗",name:"LangChain",tagline:"The foundational framework for building context-aware LLM applications.",url:"https://github.com/langchain-ai/langchain",
-   usecase:"<strong>Real-World Use:</strong> Building a customer service bot that reads a 500-page policy PDF, retrieves relevant sections, and answers customer questions accurately. LangChain provides all the plumbing — retrieval, memory, chains — so you build faster.",
-   why:"<strong>Why It Matters in 2026:</strong> LangChain is the jQuery of AI development — the default starting point. Understanding it gives you a mental model for how production AI apps are architected."},
-  {cat:"frameworks",color:"#ec4899",icon:"📚",name:"LlamaIndex",tagline:"The leading data framework for connecting custom data to LLMs.",url:"https://github.com/run-llama/llama_index",
-   usecase:"<strong>Real-World Use:</strong> A law firm has 100,000 legal documents. LlamaIndex ingests them, creates a searchable index, and lets lawyers ask natural language questions — getting answers cited with exact source documents. This is enterprise RAG.",
-   why:"<strong>Why It Matters in 2026:</strong> Every enterprise has data. LlamaIndex solves the hardest problem in enterprise AI: connecting existing knowledge bases to modern LLMs without rebuilding your infrastructure."},
-  {cat:"frameworks",color:"#8b5cf6",icon:"🌊",name:"RAGFlow",tagline:"Enterprise-grade RAG engine based on deep document understanding.",url:"https://github.com/infiniflow/ragflow",
-   usecase:"<strong>Real-World Use:</strong> Unlike basic RAG that splits documents by character count, RAGFlow understands document structure — tables, headers, footnotes, captions. A financial analyst asking about Q3 earnings gets answers that correctly parse the actual table.",
-   why:"<strong>Why It Matters in 2026:</strong> Most RAG systems fail on complex documents. RAGFlow solves this with deep document parsing — the key to reliable enterprise knowledge systems."},
-  {cat:"frameworks",color:"#10b981",icon:"🔮",name:"Haystack",tagline:"End-to-end framework for production-ready RAG, search and agent pipelines.",url:"https://github.com/deepset-ai/haystack",
-   usecase:"<strong>Real-World Use:</strong> A news organization builds a semantic search engine across 10 years of articles. Haystack handles ingestion, indexing, retrieval, re-ranking, and the final LLM generation step — all in one coherent pipeline for production.",
-   why:"<strong>Why It Matters in 2026:</strong> Haystack bridges the gap between research prototype and production deployment — it is the most complete end-to-end AI pipeline framework available."},
-  {cat:"visual",color:"#f97316",icon:"🔀",name:"n8n",tagline:"Visual workflow automation with powerful native AI integrations.",url:"https://github.com/n8n-io/n8n",
-   usecase:"<strong>Real-World Use:</strong> A marketer with no coding skills builds a workflow: When a lead fills a form → enrich with AI → generate personalized email → send via Gmail → log in Notion. n8n connects 400+ apps through a visual drag-and-drop builder.",
-   why:"<strong>Why It Matters in 2026:</strong> The democratization of AI automation. n8n lets non-developers build complex agentic workflows, lowering the barrier from months of development to hours."},
-  {cat:"visual",color:"#ef4444",icon:"🎨",name:"Langflow",tagline:"Drag-and-drop visual builder for designing and deploying AI agents.",url:"https://github.com/langflow-ai/langflow",
-   usecase:"<strong>Real-World Use:</strong> A product manager needs to prototype an AI customer support agent. In Langflow, they drag in a Vector Store component, connect it to Claude, add a Memory component, and have a working RAG chatbot in 20 minutes — no code.",
-   why:"<strong>Why It Matters in 2026:</strong> Visual AI builders are becoming the standard for rapid prototyping. Langflow translates complex LangChain concepts into a visual graph that anyone can understand and modify."},
-  {cat:"visual",color:"#fbbf24",icon:"🚀",name:"Dify",tagline:"Full-stack open-source platform to rapidly build AI-native applications.",url:"https://github.com/langgenius/dify",
-   usecase:"<strong>Real-World Use:</strong> A SaaS company wants to add an AI assistant to their product. Dify provides the entire infrastructure: model management, prompt orchestration, RAG pipeline, API endpoint, and analytics dashboard — all self-hosted.",
-   why:"<strong>Why It Matters in 2026:</strong> Dify is the Firebase for AI apps — a complete backend platform that makes deploying production-grade AI features as fast as a few hours instead of months."},
-  {cat:"interfaces",color:"#64748b",icon:"💬",name:"Open WebUI",tagline:"Feature-rich, self-hosted ChatGPT-like UI for local models.",url:"https://github.com/open-webui/open-webui",
-   usecase:"<strong>Real-World Use:</strong> A researcher runs Ollama with LLaMA 3 locally. Open WebUI gives them a polished ChatGPT-style interface — with conversation history, file uploads, RAG, image generation, and model switching — all completely offline.",
-   why:"<strong>Why It Matters in 2026:</strong> Privacy-conscious users and organizations need local AI. Open WebUI is the best-in-class interface for self-hosted models, making private AI accessible to non-technical users."},
-  {cat:"interfaces",color:"#4285F4",icon:"🔷",name:"Gemini CLI",tagline:"Google open-source CLI tool to interact with the Gemini API.",url:"https://github.com/google-gemini/gemini-cli",
-   usecase:"<strong>Real-World Use:</strong> A developer runs 'gemini explain this error log' in their terminal and gets an instant, context-aware explanation without switching to a browser. They can pipe command outputs directly to the AI for instant analysis.",
-   why:"<strong>Why It Matters in 2026:</strong> CLI AI tools are transforming developer workflows. Gemini CLI brings Google most powerful model directly into the terminal — the natural habitat of developers."}
-];
+function renderCircularVenn(){
+  var svg = document.getElementById('venn-svg');
+  if(!svg || svg.querySelectorAll('circle').length > 0) return;
+  var cx=250, cy=250, maxR=232, minR=20, n=layersData.length;
+  var tooltip = document.getElementById('venn-tooltip');
+
+  layersData.slice().reverse().forEach(function(l, ri){
+    var idx = n-1-ri;
+    var r = minR + (maxR-minR)*((n-idx-1)/(n-1));
+    var circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx', cx);
+    circle.setAttribute('cy', cy);
+    circle.setAttribute('r', r);
+    circle.setAttribute('fill', l.color+'20');
+    circle.setAttribute('stroke', l.color);
+    circle.setAttribute('stroke-width', idx===0 ? '2.5' : '1.8');
+    circle.style.cursor = 'pointer';
+    circle.style.transition = 'all .22s';
+
+    circle.addEventListener('mouseenter', function(e){
+      circle.setAttribute('fill', l.color+'42');
+      circle.setAttribute('stroke-width','3.5');
+      tooltip.style.borderColor = l.color;
+      tooltip.innerHTML = '<div class="venn-tooltip-title" style="color:'+l.color+';">'+(idx+1)+'. '+l.title+'</div><div style="color:var(--text-dim);font-size:.78rem;line-height:1.5;">'+l.subtitle+' &mdash; '+l.desc.substring(0,100)+'&hellip;</div>';
+      tooltip.classList.add('show');
+    });
+    circle.addEventListener('mousemove', function(e){
+      tooltip.style.left = (e.clientX+14)+'px';
+      tooltip.style.top  = (e.clientY-20)+'px';
+    });
+    circle.addEventListener('mouseleave', function(){
+      circle.setAttribute('fill', l.color+'20');
+      circle.setAttribute('stroke-width', idx===0?'2.5':'1.8');
+      tooltip.classList.remove('show');
+    });
+    circle.addEventListener('click', function(){
+      renderVennStack(); renderLayerCards();
+      var card = document.querySelector('[data-layer="'+idx+'"]');
+      if(card){ setTimeout(function(){ card.scrollIntoView({behavior:'smooth',block:'center'}); card.click(); }, 120); }
+    });
+    svg.appendChild(circle);
+
+    // Labels for outer, middle and inner
+    if(idx===0 || idx===n-1 || idx===4){
+      var angle = (idx===n-1) ? -Math.PI/2 : (idx===0 ? -Math.PI*0.7 : Math.PI*0.25);
+      var lx = cx + Math.cos(angle)*(r - 16);
+      var ly = cy + Math.sin(angle)*(r - 16);
+      var txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+      txt.setAttribute('x', lx); txt.setAttribute('y', ly);
+      txt.setAttribute('text-anchor','middle'); txt.setAttribute('dominant-baseline','middle');
+      txt.setAttribute('fill', l.color);
+      txt.setAttribute('font-size', idx===0?'12':'10');
+      txt.setAttribute('font-weight','800');
+      txt.setAttribute('font-family','Syne,sans-serif');
+      txt.setAttribute('pointer-events','none');
+      txt.textContent = l.title;
+      svg.appendChild(txt);
+    }
+  });
+}
+
+function renderVennMobile(){
+  var cont = document.getElementById('venn-mobile-stack');
+  if(!cont || cont.children.length > 0) return;
+  layersData.forEach(function(l, idx){
+    var card = document.createElement('div');
+    card.className = 'vmc';
+    card.style.background = l.bg;
+    card.style.borderColor = l.color+'55';
+    card.innerHTML = '<div class="vmc-num" style="color:'+l.color+';">'+(idx+1)+'</div><div class="vmc-name" style="color:'+l.color+';">'+l.title+'</div><div class="vmc-sub">'+l.subtitle+'</div>';
+    card.addEventListener('click', function(){
+      renderVennStack(); renderLayerCards();
+      var lcard = document.querySelector('[data-layer="'+idx+'"]');
+      if(lcard){ setTimeout(function(){ lcard.scrollIntoView({behavior:'smooth',block:'center'}); lcard.click(); },120); }
+    });
+    cont.appendChild(card);
+  });
+}
 
 // ════════════════════════════════════════════════════════
-//  RESOURCES: COURSES DATA
+//  RESOURCES: REPOS
 // ════════════════════════════════════════════════════════
-const coursesData=[
-  {cat:'Microsoft Series',catColor:'#0078d4',catIcon:'🟦',courses:[
-    {icon:'🤖',title:'AI for Beginners',desc:'12 weeks, 24 lessons exploring symbolic AI, neural networks, and computer vision. Built by Microsoft Cloud Advocates with quizzes and code samples.',why:'<strong>Why study it:</strong> The most comprehensive free AI curriculum online. Covers the full history and theory of AI — essential foundation for everything else.',url:'https://github.com/microsoft/AI-For-Beginners'},
-    {icon:'📊',title:'Machine Learning for Beginners',desc:'12 weeks, 26 lessons focusing on classic ML using Scikit-learn. Hands-on with real datasets and visual explanations.',why:'<strong>Why study it:</strong> Before deep learning, you need to understand ML fundamentals. This course teaches the math-light, intuitive way.',url:'https://github.com/microsoft/ML-For-Beginners'},
-    {icon:'✨',title:'Generative AI for Beginners',desc:'21 lessons covering LLM fundamentals, prompt engineering, and building search apps. Goes from zero to building a real AI app.',why:'<strong>Why study it:</strong> The bridge between theory and practice. After this, you can actually build AI-powered products using APIs.',url:'https://github.com/microsoft/generative-ai-for-beginners'},
-    {icon:'🦾',title:'AI Agents for Beginners',desc:'12 lessons specifically on designing, building, and deploying AI agent systems. The most cutting-edge curriculum in this list.',why:'<strong>Why study it:</strong> Agents are the future of AI. This is the only free curriculum focused entirely on building autonomous agent systems.',url:'https://github.com/microsoft/ai-agents-for-beginners'},
+var reposData = [
+  {cat:"agents",color:"#a855f7",icon:"🦞",name:"OpenClaw",tagline:"AI assistant that lives on your device and executes tasks autonomously.",url:"https://github.com/openclaw/openclaw",
+   usecase:"<strong>Real-World Use:</strong> Imagine an AI that opens your browser, searches for the best flight, fills in your details, and books it — all while you watch. OpenClaw does this across your native apps without needing APIs.",
+   why:"<strong>Why It Matters in 2026:</strong> Computer-use AI is going mainstream. OpenClaw represents personal autonomous agents that work offline on your own hardware — privacy-first automation."},
+  {cat:"agents",color:"#6366f1",icon:"👥",name:"CrewAI",tagline:"Orchestrate role-playing, autonomous multi-agent AI teams.",url:"https://github.com/crewAIInc/crewAI",
+   usecase:"<strong>Real-World Use:</strong> You want to analyze a startup market. Assign a Research Agent (searches web), a Data Agent (crunches numbers), and a Writer Agent (drafts report). CrewAI makes them collaborate like a real team.",
+   why:"<strong>Why It Matters in 2026:</strong> Single agents fail on complex tasks. Multi-agent teams with specialized roles achieve dramatically higher reliability — the standard pattern for production AI systems."},
+  {cat:"agents",color:"#00d4c8",icon:"⌨️",name:"Claude Code",tagline:"Anthropic agentic CLI tool to understand and edit entire codebases.",url:"https://github.com/anthropics/claude-code",
+   usecase:"<strong>Real-World Use:</strong> A developer types a refactor instruction — Claude Code reads every file, understands the full architecture, makes changes across hundreds of files, and runs tests. Like a senior engineer in your terminal.",
+   why:"<strong>Why It Matters in 2026:</strong> AI coding is the fastest-growing use case. Claude Code is the shift from a chatbot that writes snippets to an autonomous coding agent with full project context."},
+  {cat:"models",color:"#22c55e",icon:"🦙",name:"Ollama",tagline:"The easiest way to run powerful LLMs locally on your own hardware.",url:"https://github.com/ollama/ollama",
+   usecase:"<strong>Real-World Use:</strong> A doctor runs patient data analysis entirely on a laptop with no internet connection, using LLaMA 3. Zero cloud costs, zero privacy risk. One terminal command to start.",
+   why:"<strong>Why It Matters in 2026:</strong> Privacy regulations (GDPR, HIPAA) and cost pressures are driving enterprises to run AI locally. Ollama makes this accessible to non-researchers."},
+  {cat:"models",color:"#06b6d4",icon:"🔬",name:"DeepSeek-V3",tagline:"Highly efficient open-weight model dominating the AI benchmarks.",url:"https://github.com/deepseek-ai/DeepSeek-V3",
+   usecase:"<strong>Real-World Use:</strong> A startup needs GPT-4 level intelligence at 5% of the cost. DeepSeek-V3 delivers that — a fully open model they can fine-tune, self-host, and modify with no per-token API fees.",
+   why:"<strong>Why It Matters in 2026:</strong> The open-source vs closed-source model war defines AI future. DeepSeek proved open models can match closed ones — accelerating access for everyone."},
+  {cat:"models",color:"#f59e0b",icon:"⚡",name:"vLLM",tagline:"High-throughput, memory-efficient LLM inference and serving engine.",url:"https://github.com/vllm-project/vllm",
+   usecase:"<strong>Real-World Use:</strong> A company needs to serve 10,000 concurrent users on their AI chatbot without buying 50 GPU servers. vLLM PagedAttention lets one server do the work of many.",
+   why:"<strong>Why It Matters in 2026:</strong> Scaling AI inference efficiently is now a competitive advantage. vLLM is the industry standard for production LLM serving, used by every major AI company."},
+  {cat:"frameworks",color:"#3b82f6",icon:"🔗",name:"LangChain",tagline:"The foundational framework for building context-aware LLM applications.",url:"https://github.com/langchain-ai/langchain",
+   usecase:"<strong>Real-World Use:</strong> Building a customer service bot that reads a 500-page policy PDF, retrieves relevant sections, and answers questions accurately. LangChain provides all the plumbing so you build faster.",
+   why:"<strong>Why It Matters in 2026:</strong> LangChain is the jQuery of AI development — the default starting point. Understanding it gives you the mental model for how production AI apps are built."},
+  {cat:"frameworks",color:"#ec4899",icon:"📚",name:"LlamaIndex",tagline:"The leading data framework for connecting custom data to LLMs.",url:"https://github.com/run-llama/llama_index",
+   usecase:"<strong>Real-World Use:</strong> A law firm has 100,000 legal documents. LlamaIndex ingests them, creates a searchable index, and lets lawyers ask natural language questions — answers cited with exact source documents.",
+   why:"<strong>Why It Matters in 2026:</strong> Every enterprise has data. LlamaIndex solves the hardest problem in enterprise AI: connecting existing knowledge bases to modern LLMs without rebuilding infrastructure."},
+  {cat:"frameworks",color:"#8b5cf6",icon:"🌊",name:"RAGFlow",tagline:"Enterprise-grade RAG engine based on deep document understanding.",url:"https://github.com/infiniflow/ragflow",
+   usecase:"<strong>Real-World Use:</strong> Unlike basic RAG that splits documents by character count, RAGFlow understands document structure — tables, headers, footnotes. A financial analyst gets answers that correctly parse actual tables.",
+   why:"<strong>Why It Matters in 2026:</strong> Most RAG systems fail on complex documents. RAGFlow solves this with deep document parsing — the key to reliable enterprise knowledge systems."},
+  {cat:"frameworks",color:"#10b981",icon:"🔮",name:"Haystack",tagline:"End-to-end framework for production-ready RAG, search and agent pipelines.",url:"https://github.com/deepset-ai/haystack",
+   usecase:"<strong>Real-World Use:</strong> A news organization builds a semantic search engine across 10 years of articles. Haystack handles ingestion, indexing, retrieval, re-ranking, and LLM generation — all in one pipeline ready for production.",
+   why:"<strong>Why It Matters in 2026:</strong> Haystack bridges the gap between research prototype and production deployment — the most complete end-to-end AI pipeline framework available."},
+  {cat:"visual",color:"#f97316",icon:"🔀",name:"n8n",tagline:"Visual workflow automation with powerful native AI integrations.",url:"https://github.com/n8n-io/n8n",
+   usecase:"<strong>Real-World Use:</strong> A marketer with no coding skills builds a workflow: lead fills a form → enrich with AI → generate personalized email → send via Gmail → log in Notion. n8n connects 400+ apps visually.",
+   why:"<strong>Why It Matters in 2026:</strong> n8n lets non-developers build complex agentic workflows — lowering the barrier from months of development to hours."},
+  {cat:"visual",color:"#ef4444",icon:"🎨",name:"Langflow",tagline:"Drag-and-drop visual builder for designing and deploying AI agents.",url:"https://github.com/langflow-ai/langflow",
+   usecase:"<strong>Real-World Use:</strong> A product manager prototypes an AI customer support agent. In Langflow, they drag in a Vector Store, connect it to Claude, add a Memory node, and have a working RAG chatbot in 20 minutes — no code.",
+   why:"<strong>Why It Matters in 2026:</strong> Visual AI builders are the standard for rapid prototyping. Langflow translates complex LangChain concepts into a visual graph anyone can understand."},
+  {cat:"visual",color:"#fbbf24",icon:"🚀",name:"Dify",tagline:"Full-stack open-source platform to rapidly build AI-native applications.",url:"https://github.com/langgenius/dify",
+   usecase:"<strong>Real-World Use:</strong> A SaaS company wants to add an AI assistant to their product. Dify provides the full infrastructure: model management, prompt orchestration, RAG pipeline, API endpoint, and analytics — all self-hosted.",
+   why:"<strong>Why It Matters in 2026:</strong> Dify is the Firebase for AI apps — a complete backend platform that makes deploying production AI features as fast as a few hours."},
+  {cat:"interfaces",color:"#64748b",icon:"💬",name:"Open WebUI",tagline:"Feature-rich, self-hosted ChatGPT-like UI for local models.",url:"https://github.com/open-webui/open-webui",
+   usecase:"<strong>Real-World Use:</strong> A researcher runs Ollama with LLaMA 3 locally. Open WebUI gives them a polished ChatGPT-style interface — conversation history, file uploads, RAG, image generation, and model switching — all offline.",
+   why:"<strong>Why It Matters in 2026:</strong> Privacy-conscious users need local AI. Open WebUI is the best-in-class interface for self-hosted models, making private AI accessible to everyone."},
+  {cat:"interfaces",color:"#4285F4",icon:"🔷",name:"Gemini CLI",tagline:"Google open-source CLI tool to interact with the Gemini API.",url:"https://github.com/google-gemini/gemini-cli",
+   usecase:"<strong>Real-World Use:</strong> A developer runs a command in their terminal and gets an instant context-aware explanation without switching to a browser. They can pipe command outputs directly to the AI for instant analysis.",
+   why:"<strong>Why It Matters in 2026:</strong> CLI AI tools are transforming developer workflows. Gemini CLI brings Google most powerful model directly into the terminal."}
+];
+
+function renderRepos(){
+  var grid = document.getElementById('repo-grid');
+  if(!grid || grid.children.length > 0) return;
+  reposData.forEach(function(r){
+    var card = document.createElement('div');
+    card.className = 'repo-card';
+    card.setAttribute('data-rcat', r.cat);
+    card.innerHTML =
+      '<div class="repo-card-top">' +
+        '<div class="repo-badge" style="background:'+r.color+'18;border:1px solid '+r.color+'35;color:'+r.color+';">'+r.icon+' '+r.cat+'</div>' +
+        '<div class="repo-name" style="color:'+r.color+';">'+r.name+'</div>' +
+        '<div class="repo-tagline">'+r.tagline+'</div>' +
+      '</div>' +
+      '<div class="repo-expand">' +
+        '<div class="repo-usecase">'+r.usecase+'</div>' +
+        '<div class="repo-why">'+r.why+'</div>' +
+      '</div>' +
+      '<div class="repo-foot">' +
+        '<a href="'+r.url+'" target="_blank" class="repo-btn" style="background:'+r.color+';"><i class="fab fa-github"></i> View on GitHub</a>' +
+        '<button class="repo-more-btn" onclick="toggleRepo(this)"><i class="fas fa-info-circle"></i> Details</button>' +
+      '</div>';
+    grid.appendChild(card);
+  });
+}
+
+function toggleRepo(btn){
+  var card = btn.closest('.repo-card');
+  card.classList.toggle('open');
+  btn.innerHTML = card.classList.contains('open') ? '<i class="fas fa-chevron-up"></i> Less' : '<i class="fas fa-info-circle"></i> Details';
+}
+
+function filterRepos(cat, el){
+  document.querySelectorAll('.cat-tab').forEach(function(t){ t.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelectorAll('.repo-card').forEach(function(c){
+    c.style.display = (cat==='all' || c.getAttribute('data-rcat')===cat) ? '' : 'none';
+  });
+}
+
+// ════════════════════════════════════════════════════════
+//  RESOURCES: COURSES
+// ════════════════════════════════════════════════════════
+var coursesData = [
+  {cat:"Microsoft Series",catColor:"#0078d4",catIcon:"🟦",courses:[
+    {icon:"🤖",title:"AI for Beginners",desc:"12 weeks, 24 lessons exploring symbolic AI, neural networks, and computer vision. Built by Microsoft with quizzes and code samples.",why:"<strong>Why study it:</strong> The most comprehensive free AI curriculum online — the essential foundation for everything else.",url:"https://github.com/microsoft/AI-For-Beginners"},
+    {icon:"📊",title:"Machine Learning for Beginners",desc:"12 weeks, 26 lessons focusing on classic ML using Scikit-learn. Hands-on with real datasets.",why:"<strong>Why study it:</strong> Before deep learning, you need ML fundamentals. Teaches it in a math-light, intuitive way.",url:"https://github.com/microsoft/ML-For-Beginners"},
+    {icon:"✨",title:"Generative AI for Beginners",desc:"21 lessons covering LLM fundamentals, prompt engineering, and building search apps.",why:"<strong>Why study it:</strong> The bridge between theory and practice. After this, you can actually build AI-powered products.",url:"https://github.com/microsoft/generative-ai-for-beginners"},
+    {icon:"🦾",title:"AI Agents for Beginners",desc:"12 lessons specifically on designing, building, and deploying AI agent systems.",why:"<strong>Why study it:</strong> Agents are the future of AI. The only free curriculum focused entirely on building autonomous agent systems.",url:"https://github.com/microsoft/ai-agents-for-beginners"}
   ]},
-  {cat:'AI Agents & Frameworks',catColor:'#a855f7',catIcon:'🤖',courses:[
-    {icon:'🤗',title:'Hugging Face Agents Course',desc:'Interactive course teaching you to build and deploy your own AI agents from scratch using the latest open-source tools.',why:'<strong>Why study it:</strong> Hugging Face is the GitHub of AI models. Their agent course is the most practical, hands-on introduction to building real agents.',url:'https://huggingface.co/learn/agents-course/unit0/introduction'},
-    {icon:'⛵',title:'LangChain Academy',desc:'Free official courses from the creators of LangChain, covering everything from basic chains to advanced LangGraph agent workflows.',why:'<strong>Why study it:</strong> LangChain is the most-used AI framework. Learning from the creators gives you the mental model that all other frameworks use.',url:'https://academy.langchain.com'},
+  {cat:"AI Agents and Frameworks",catColor:"#a855f7",catIcon:"🤖",courses:[
+    {icon:"🤗",title:"Hugging Face Agents Course",desc:"Interactive course teaching you to build and deploy your own AI agents from scratch using the latest open-source tools.",why:"<strong>Why study it:</strong> Hugging Face is the GitHub of AI models. The most practical, hands-on introduction to building real agents.",url:"https://huggingface.co/learn/agents-course/unit0/introduction"},
+    {icon:"⛵",title:"LangChain Academy",desc:"Free official courses from the creators of LangChain, covering everything from basic chains to advanced LangGraph agent workflows.",why:"<strong>Why study it:</strong> Learning from the creators gives you the mental model that all other frameworks follow.",url:"https://academy.langchain.com"}
   ]},
-  {cat:'Prompt Engineering',catColor:'#ffd166',catIcon:'🧠',courses:[
-    {icon:'🎓',title:'ChatGPT Prompt Engineering (DeepLearning.AI)',desc:'A highly practical 1-hour free course by Andrew Ng on writing code to interface effectively with LLMs. Used by 1M+ learners.',why:'<strong>Why study it:</strong> Andrew Ng is the Godfather of online ML education. This course turns "casual prompting" into a systematic engineering skill.',url:'https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers'},
-    {icon:'📖',title:'DAIR.AI Prompt Engineering Guide',desc:'Comprehensive open-source guide documenting all the latest prompting techniques, from basic to CoT, RAG, and agent prompting with research citations.',why:'<strong>Why study it:</strong> This is the definitive reference for prompting techniques — the resource professionals use when they need to push models to their limits.',url:'https://github.com/dair-ai/Prompt-Engineering-Guide'},
-    {icon:'🔬',title:'Anthropic Educational Courses',desc:'Official GitHub repo with interactive Jupyter notebooks for prompt engineering and Claude API fundamentals. Built by Anthropic's own team.',why:'<strong>Why study it:</strong> Learn best practices directly from the company building Claude. Includes insider techniques not documented elsewhere.',url:'https://github.com/anthropics/courses'},
-    {icon:'📚',title:'OpenAI Cookbook',desc:'Open-source collection of examples and guides for building with the OpenAI API, including function calling, embeddings, and fine-tuning.',why:'<strong>Why study it:</strong> The most practical resource for building production AI features. Real code, real use cases, real patterns from OpenAI engineers.',url:'https://github.com/openai/openai-cookbook'},
+  {cat:"Prompt Engineering",catColor:"#ffd166",catIcon:"🧠",courses:[
+    {icon:"🎓",title:"ChatGPT Prompt Engineering (DeepLearning.AI)",desc:"A highly practical 1-hour free course by Andrew Ng on writing code to interface effectively with LLMs. Over 1 million learners.",why:"<strong>Why study it:</strong> Turns casual prompting into a systematic engineering skill you can apply immediately.",url:"https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers"},
+    {icon:"📖",title:"DAIR.AI Prompt Engineering Guide",desc:"Comprehensive open-source guide documenting all the latest prompting techniques from basic to advanced, with research citations.",why:"<strong>Why study it:</strong> The definitive reference for prompting — the resource professionals use when pushing models to their limits.",url:"https://github.com/dair-ai/Prompt-Engineering-Guide"},
+    {icon:"🔬",title:"Anthropic Educational Courses",desc:"Official GitHub repo with interactive Jupyter notebooks for prompt engineering and Claude API fundamentals. Built by the Anthropic team.",why:"<strong>Why study it:</strong> Learn best practices directly from the company that built Claude. Includes insider techniques.",url:"https://github.com/anthropics/courses"},
+    {icon:"📚",title:"OpenAI Cookbook",desc:"Open-source collection of examples and guides for building with the OpenAI API, including function calling, embeddings, and fine-tuning.",why:"<strong>Why study it:</strong> The most practical resource for building production AI features — real code, real patterns from OpenAI engineers.",url:"https://github.com/openai/openai-cookbook"}
   ]},
-  {cat:'Foundations',catColor:'#10b981',catIcon:'🎓',courses:[
-    {icon:'🔷',title:'Google ML Crash Course',desc:"Google's fast-paced, practical introduction to ML using TensorFlow APIs. Completely revamped for modern concepts with interactive exercises.",why:'<strong>Why study it:</strong> Google's course is the best balance of theory and practice. You leave knowing how to implement real ML models, not just conceptually understand them.',url:'https://developers.google.com/machine-learning/crash-course'},
-    {icon:'⚡',title:'Practical Deep Learning (Fast.ai)',desc:'A legendary top-down approach to deep learning. You build working models first, and learn the math later — the most effective teaching approach.',why:'<strong>Why study it:</strong> Fast.ai's approach is the fastest path to building real AI systems. Many top AI researchers credit this course as their starting point.',url:'https://course.fast.ai'},
-    {icon:'🏛️',title:"Harvard CS50 AI with Python",desc:"Harvard's legendary free course exploring concepts and algorithms at the foundation of modern AI — from search to neural networks.",why:'<strong>Why study it:</strong> Harvard quality, completely free. CS50 is the gold standard of online education. The Python focus makes every concept immediately applicable.',url:'https://cs50.harvard.edu/ai'},
-    {icon:'🌍',title:'Elements of AI',desc:'A fantastic non-technical crash course by the University of Helsinki designed to demystify AI and explain its societal implications. No code required.',why:'<strong>Why study it:</strong> Perfect for anyone who needs to understand AI for business, policy, or personal decisions without writing a single line of code.',url:'https://www.elementsofai.com'},
+  {cat:"Foundations",catColor:"#10b981",catIcon:"🎓",courses:[
+    {icon:"🔷",title:"Google ML Crash Course",desc:"Fast-paced, practical introduction to ML using TensorFlow APIs. Completely revamped for modern concepts with interactive exercises.",why:"<strong>Why study it:</strong> Best balance of theory and practice — you leave knowing how to implement real ML models.",url:"https://developers.google.com/machine-learning/crash-course"},
+    {icon:"⚡",title:"Practical Deep Learning (Fast.ai)",desc:"A legendary top-down approach. You build working models first and learn the math later — the most effective teaching method.",why:"<strong>Why study it:</strong> The fastest path to building real AI systems. Many top AI researchers credit this as their starting point.",url:"https://course.fast.ai"},
+    {icon:"🏛️",title:"Harvard CS50 AI with Python",desc:"Harvard legendary free course on the concepts and algorithms at the foundation of modern AI — from search to neural networks.",why:"<strong>Why study it:</strong> Harvard quality, completely free. Every concept is immediately applicable in real projects.",url:"https://cs50.harvard.edu/ai"},
+    {icon:"🌍",title:"Elements of AI",desc:"A non-technical crash course by University of Helsinki designed to demystify AI and explain its societal implications. No code needed.",why:"<strong>Why study it:</strong> Perfect for understanding AI for business or policy decisions without writing a single line of code.",url:"https://www.elementsofai.com"}
   ]}
 ];
 
-function renderCourseSection(){
-  const container=document.getElementById('courses-container');
-  if(!container||container.children.length>0)return;
-  coursesData.forEach(cat=>{
-    const section=document.createElement('div');
-    section.className='course-cat';
-    section.innerHTML=`<div class="course-cat-title">${cat.catIcon} ${cat.cat}</div><div class="course-grid" id="cg-${cat.cat.replace(/\s/g,'-')}"></div>`;
-    container.appendChild(section);
-    const grid=section.querySelector('.course-grid');
-    cat.courses.forEach(c=>{
-      const card=document.createElement('div');
-      card.className='course-card';
-      card.innerHTML=`
-        <div class="course-icon">${c.icon}</div>
-        <div class="course-title">${c.title}</div>
-        <div class="course-desc">${c.desc}</div>
-        <div class="course-why">${c.why}</div>
-        <a href="${c.url}" target="_blank" class="course-btn" style="border-color:${cat.catColor};color:${cat.catColor};">
-          <i class="fas fa-external-link-alt"></i> Start Learning Free
-        </a>`;
+function renderCourses(){
+  var cont = document.getElementById('courses-container');
+  if(!cont || cont.children.length > 0) return;
+  coursesData.forEach(function(cat){
+    var sec = document.createElement('div');
+    sec.className = 'course-cat';
+    sec.innerHTML = '<div class="course-cat-label" style="color:'+cat.catColor+';">'+cat.catIcon+' '+cat.cat+'</div><div class="course-grid" id="cg-'+cat.cat.replace(/ /g,'-')+'"></div>';
+    cont.appendChild(sec);
+    var grid = sec.querySelector('.course-grid');
+    cat.courses.forEach(function(c){
+      var card = document.createElement('div');
+      card.className = 'course-card';
+      card.innerHTML =
+        '<div class="course-icon">'+c.icon+'</div>' +
+        '<div class="course-title">'+c.title+'</div>' +
+        '<div class="course-desc">'+c.desc+'</div>' +
+        '<div class="course-why">'+c.why+'</div>' +
+        '<a href="'+c.url+'" target="_blank" class="course-btn" style="border-color:'+cat.catColor+';color:'+cat.catColor+';"><i class="fas fa-external-link-alt"></i> Start Free</a>';
       grid.appendChild(card);
     });
   });
@@ -1810,37 +1816,36 @@ function renderCourseSection(){
 </script>
 
 <!-- ══════════════════════════════════════════
-     TAB 8: RESOURCES
+     TAB: RESOURCES
 ══════════════════════════════════════════ -->
 <div class="tab-content" id="tab-resources">
 <div class="res-page">
 <div class="res-wrap">
-  <div class="res-hero">
+  <div class="hero">
     <div class="eyebrow"><i class="fas fa-rocket"></i> Curated for 2026</div>
     <h1>AI Resources Hub</h1>
-    <p style="color:var(--text-dim);font-size:.95rem;max-width:580px;margin:.8rem auto 0;line-height:1.7;">Top GitHub repositories and free courses hand-picked for your AI literacy journey. Click any card to see real-world use cases, then explore.</p>
+    <p>Top GitHub repositories and free courses hand-picked for your AI literacy journey. Click any card to see real-world use cases.</p>
   </div>
 
-  <!-- ══ YOUTUBE PLAYLIST BANNER ══ -->
+  <!-- PLAYLIST BANNER -->
   <div class="playlist-banner">
     <div class="pb-inner">
-      <div class="pb-icon"><i class="fab fa-youtube"></i></div>
+      <div class="pb-yt-icon"><i class="fab fa-youtube"></i></div>
       <div class="pb-text">
-        <div class="pb-label">🎬 Observe with Satyam · Exclusive Series</div>
+        <div class="pb-eyebrow">Observe with Satyam · Exclusive Series</div>
         <div class="pb-title">AI Literacy Playlist</div>
-        <div class="pb-sub">Your complete guided journey from zero to building AI agents — curated videos that explain every concept on this site, step by step.</div>
-        <a href="https://youtube.com/playlist?list=PL9B7HLzfbpfNspofdGMN2yH5URxVCs2Lo&si=Y-GulxjuWjRys62O" target="_blank" class="pb-btn">
+        <div class="pb-sub">Your complete guided journey from zero to building AI agents — curated videos explaining every concept on this site, step by step.</div>
+        <a href="https://youtube.com/playlist?list=PL9B7HLzfbpfNspofdGMN2yH5URxVCs2Lo&si=Y-GulxjuWjRys62O" target="_blank" class="pb-watch-btn">
           <i class="fab fa-youtube"></i> Watch the Full Playlist
         </a>
       </div>
     </div>
   </div>
 
-  <!-- ══ TOP 15 GITHUB REPOS ══ -->
-  <div class="res-section-title"><i class="fab fa-github" style="color:var(--teal);"></i> Top 15 GitHub Repositories</div>
-  <p style="color:var(--text-dim);font-size:.87rem;margin-bottom:1.2rem;line-height:1.65;">These are the most relevant, actively maintained repositories in the AI space right now. Click any card to see why it matters and how people are using it today.</p>
-
-  <div class="cat-tabs" id="repo-cat-tabs">
+  <!-- TOP 15 REPOS -->
+  <div class="res-section-title"><i class="fab fa-github"></i> Top 15 GitHub Repositories</div>
+  <p style="color:var(--text-dim);font-size:.86rem;margin-bottom:1.2rem;line-height:1.65;">Click any card to see why it matters today and how people are using it in the real world.</p>
+  <div class="cat-tabs">
     <button class="cat-tab active" onclick="filterRepos('all',this)">All 15</button>
     <button class="cat-tab" onclick="filterRepos('agents',this)">🤖 Agents</button>
     <button class="cat-tab" onclick="filterRepos('models',this)">🧠 Models</button>
@@ -1848,37 +1853,30 @@ function renderCourseSection(){
     <button class="cat-tab" onclick="filterRepos('visual',this)">⚡ Visual</button>
     <button class="cat-tab" onclick="filterRepos('interfaces',this)">🖥️ Interfaces</button>
   </div>
+  <div class="repo-grid" id="repo-grid"></div>
 
-  <div class="repo-grid" id="repo-grid">
-    <!-- Cards injected by JS -->
-  </div>
+  <!-- FREE COURSES -->
+  <div class="res-section-title" style="border-left-color:var(--gold);"><i class="fas fa-graduation-cap" style="color:var(--gold);"></i> Free Top Courses</div>
+  <p style="color:var(--text-dim);font-size:.86rem;margin-bottom:1.5rem;line-height:1.65;">100% free, high-quality courses from world-class institutions — organized by learning path.</p>
+  <div id="courses-container"></div>
 
-  <!-- ══ FREE COURSES ══ -->
-  <div class="res-section-title"><i class="fas fa-graduation-cap" style="color:var(--gold);"></i> Free Top Courses</div>
-  <p style="color:var(--text-dim);font-size:.87rem;margin-bottom:1.5rem;line-height:1.65;">100% free, high-quality courses from world-class institutions. Organized by learning path so you know exactly what to study and in what order.</p>
-
-  <div id="courses-container">
-    <!-- Injected by JS -->
-  </div>
-
-  <!-- ══ GOOGLE DRIVE CARD ══ -->
-  <div class="res-section-title"><i class="fab fa-google-drive" style="color:#4285F4;"></i> Personal Resource Folder</div>
+  <!-- GOOGLE DRIVE -->
+  <div class="res-section-title" style="border-left-color:#4285F4;"><i class="fab fa-google-drive" style="color:#4285F4;"></i> Personal Resource Folder</div>
   <a href="https://drive.google.com/drive/folders/1iiVF53G3mZqWgE-JjXNoGaHF49KLLuwT" target="_blank" class="drive-card">
-    <div class="drive-icon"><i class="fab fa-google-drive"></i></div>
+    <div class="drive-icon-box"><i class="fab fa-google-drive"></i></div>
     <div class="drive-text">
-      <div class="drive-label">Google Drive · Satyam's Collection</div>
+      <div class="drive-eyebrow">Google Drive · Satyam Collection</div>
       <div class="drive-title">Personal AI Resource Folder</div>
-      <div class="drive-sub">Additional notes, summaries, curated PDFs, and exclusive materials from Satyam's personal AI literacy journey. Constantly updated.</div>
+      <div class="drive-sub">Additional notes, summaries, curated PDFs, and exclusive materials from Satyam personal AI literacy journey. Constantly updated.</div>
     </div>
     <div class="drive-arrow"><i class="fas fa-arrow-right"></i></div>
   </a>
-
 </div>
 </div>
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">Observe with <span>Satyam</span></div>
-    <div class="footer-copy">© 2026 Observe with Satyam. Built for the AI Literacy Journey.</div>
+    <div class="footer-copy">2026 Observe with Satyam. Built for the AI Literacy Journey.</div>
     <div class="footer-links">
       <a href="https://youtube.com/@observe_with_satyam" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
       <a href="https://www.linkedin.com/in/satyam-kumar5286o" target="_blank"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
@@ -1890,5 +1888,4 @@ function renderCourseSection(){
 
 </body>
 </html>
-
 
